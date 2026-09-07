@@ -206,7 +206,7 @@ if($error === ""){
 
 
     $stmt->bind_param(
-        "ssss",
+        "sss",
         $full_name,
         $hashedPassword,
         $profile_picture
