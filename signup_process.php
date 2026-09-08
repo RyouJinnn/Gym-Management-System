@@ -4,7 +4,7 @@ include("connect.php");
 
 date_default_timezone_set("Asia/Manila");
 
-if(!isset($_POST['btn_signup'])){
+if($_SERVER['REQUEST_METHOD'] !== 'POST'){
     header("Location: signup.php");
     exit();
 }
