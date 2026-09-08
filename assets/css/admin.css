@@ -430,11 +430,8 @@ transition:.3s;
 }
 
 .login-card button:hover{
-
-transform:translateY(-3px);
-
-box-shadow:0 12px 30px rgba(255,215,0,.35);
-
+    transform:translateY(-3px);
+    box-shadow:0 12px 30px rgba(57,255,20,.35);
 }
 
 .login-footer{
@@ -2181,11 +2178,6 @@ grid-template-columns:1fr;
 
 }
 
-
-/* ==========================
-   ACTIONS
-========================== */
-
 .edit-actions{
 
     display:flex;
@@ -2250,18 +2242,11 @@ grid-template-columns:1fr;
 
 }
 
-.edit-save:hover{
-
-    background:#32e612;
-
+.edit-actions .edit-save:hover{
+    background:#32e612 !important;
+    color:#000 !important;
     transform:translateY(-2px);
-
 }
-
-
-/* ==========================
-   EDIT MEMBER BUTTON
-========================== */
 
 .member-profile-actions{
 
@@ -2298,11 +2283,6 @@ grid-template-columns:1fr;
     background:#32e612;
 
 }
-
-
-/* ==========================
-   RESPONSIVE
-========================== */
 
 @media(max-width:800px){
 
@@ -2342,10 +2322,6 @@ grid-template-columns:1fr;
     }
 
 }
-
-/* ==========================
-   MEMBER TOTAL
-========================== */
 
 .member-total{
 
@@ -9663,10 +9639,9 @@ grid-template-columns:1fr;
 }
 
 .payment-edit-content .btn-primary:hover {
-    background: #e6be00;
-    border-color: #e6be00;
+    background: #32e612;
+    border-color: #32e612;
 }
-
 
 /* Responsive */
 @media (max-width: 900px) {
@@ -10961,10 +10936,6 @@ input[type="date"]::-webkit-calendar-picker-indicator {
     }
 
 }
-
-/* =========================================================
-   MEMBERSHIP REPORT PRINT - BLACK / YELLOW THEME
-========================================================= */
 
 @media print {
 
