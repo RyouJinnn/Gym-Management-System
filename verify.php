@@ -322,11 +322,16 @@ if(isset($_SESSION['verify_error'])){
                 <small id="codeError" class="error"></small>
 
                 <div class="resend">
-    Didn't receive the code?
-    <a href="javascript:void(0)" id="resendLink">Resend Code</a>
-    <span id="timerContainer" style="display:none;">
-        (<span id="timer">01:00</span>)
+    <span id="resendMessage">Didn't receive the code?</span>
+
+    <span id="timerContainer">
+        Resend Code available in
+        <span id="timer">01:00</span>
     </span>
+
+    <a href="javascript:void(0)" id="resendLink" style="display:none;">
+        Resend Code
+    </a>
 </div>
 
                 <button type="submit">
@@ -490,6 +495,7 @@ inputs.forEach(box=>{
 const resend = document.getElementById("resendLink");
 const timer = document.getElementById("timer");
 const timerContainer = document.getElementById("timerContainer");
+const resendMessage = document.getElementById("resendMessage");
 
 let countdown;
 
@@ -497,57 +503,77 @@ function startCountdown(endTime){
 
     clearInterval(countdown);
 
-    resend.style.pointerEvents="none";
-    resend.style.opacity=".5";
-    timerContainer.style.display="inline";
+    resend.style.display = "none";
+    timerContainer.style.display = "inline";
+    resendMessage.style.display = "inline";
 
-    countdown=setInterval(function(){
+    countdown = setInterval(function(){
 
-        const seconds=Math.floor((endTime-Date.now())/1000);
+        const seconds = Math.floor((endTime - Date.now()) / 1000);
 
-        if(seconds<=0){
+        if(seconds <= 0){
 
             clearInterval(countdown);
 
-            sessionStorage.removeItem("verifyTimerEnd");
-
-            resend.style.pointerEvents="auto";
-            resend.style.opacity="1";
-            timerContainer.style.display="none";
+            timerContainer.style.display = "none";
+            resendMessage.style.display = "inline";
+            resend.style.display = "inline";
 
             return;
         }
 
-        const minutes=Math.floor(seconds/60);
-        const secs=seconds%60;
+        const minutes = Math.floor(seconds / 60);
+        const secs = seconds % 60;
 
-        timer.innerHTML=
-            String(minutes).padStart(2,"0")+":"+
+        timer.innerHTML =
+            String(minutes).padStart(2,"0") + ":" +
             String(secs).padStart(2,"0");
 
     },1000);
 
+    // Update immediately
+    const seconds = Math.max(0, Math.floor((endTime - Date.now()) / 1000));
+
+    const minutes = Math.floor(seconds / 60);
+    const secs = seconds % 60;
+
+    timer.innerHTML =
+        String(minutes).padStart(2,"0") + ":" +
+        String(secs).padStart(2,"0");
 }
 
-window.addEventListener("load",function(){
 
-    const savedEnd=sessionStorage.getItem("verifyTimerEnd");
+// ================= START TIMER =================
 
-    if(savedEnd && Number(savedEnd)>Date.now()){
+window.addEventListener("load", function(){
+
+    const savedEnd = sessionStorage.getItem("verifyTimerEnd");
+
+    if(savedEnd && Number(savedEnd) > Date.now()){
 
         startCountdown(Number(savedEnd));
 
+    }else{
+
+        const endTime = Date.now() + 60000;
+
+        sessionStorage.setItem("verifyTimerEnd", endTime);
+
+        startCountdown(endTime);
     }
 
 });
 
-resend.addEventListener("click",function(e){
+
+// ================= RESEND CODE =================
+
+resend.addEventListener("click", function(e){
 
     e.preventDefault();
 
-    const endTime=Date.now()+60000;
+    const endTime = Date.now() + 60000;
 
-    sessionStorage.setItem("verifyTimerEnd",endTime);
+    sessionStorage.setItem("verifyTimerEnd", endTime);
 
     startCountdown(endTime);
 
