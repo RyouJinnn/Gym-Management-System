@@ -48,7 +48,7 @@ try{
 
         <p>Please enter this code to activate your account.</p>
 
-        <p>This code expires in 10 minutes.</p>
+        <p>This code expires in 1 minute.</p>
 
     </div>
     ";
@@ -59,6 +59,8 @@ try{
 
 } catch (Exception $e) {
 
-    die("Email could not be sent.<br>" . $mail->ErrorInfo);
+    $_SESSION['signup_error'] = "Email could not be sent. Please try again.";
+    header("Location: signup.php");
+    exit();
 
 }
