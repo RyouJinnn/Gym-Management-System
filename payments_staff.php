@@ -769,7 +769,5 @@ else if (paymentParams.get("error") === "1") {
 }
 
 </script>
-
-
 </body>
 </html>
