@@ -152,7 +152,8 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
     $allowedStatuses = [
         "Pending",
-        "Approved"
+        "Approved",
+        "Declined"
     ];
 
 
@@ -356,10 +357,45 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $update->close();
 
     /* ==========================================
-       SYNC MEMBERSHIP WHEN PAYMENT IS APPROVED
-    ========================================== */
+   HANDLE DECLINED PAYMENT
+========================================== */
 
-    if ($payment_status === "Approved") {
+if ($payment_status === "Declined") {
+
+    /*
+     * If this payment was previously approved,
+     * cancel the related active membership.
+     */
+    if (($payment['payment_status'] ?? '') === "Approved") {
+
+        $cancelMembership = $con->prepare("
+            UPDATE membership
+            SET status = 'Cancelled'
+            WHERE member_id = ?
+            AND plan_id = ?
+            AND status = 'Active'
+            ORDER BY membership_id DESC
+            LIMIT 1
+        ");
+
+        $cancelMembership->bind_param(
+            "ii",
+            $member_id,
+            $plan_id
+        );
+
+        $cancelMembership->execute();
+        $cancelMembership->close();
+    }
+
+}
+
+
+/* ==========================================
+   SYNC MEMBERSHIP WHEN PAYMENT IS APPROVED
+========================================== */
+
+if ($payment_status === "Approved") {
 
         /* GET PLAN INFORMATION */
         $planStmt = $con->prepare("
@@ -397,12 +433,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             $membershipPrice =
                 (float)$planData['price'];
 
-            /* USE PAYMENT DATE AS START DATE */
-            $start_date =
-                date(
-                    "Y-m-d",
-                    strtotime($payment_date)
-                );
+            $start_date = date("Y-m-d");
 
             /* CALCULATE END DATE */
             $end_date =
@@ -993,6 +1024,19 @@ rel="stylesheet">
                                 >
                                     Approved
                                 </option>
+
+                                <option
+    value="Declined"
+    <?= (
+        $payment['payment_status']
+        === "Declined"
+    )
+        ? 'selected'
+        : ''
+    ?>
+>
+    Declined
+</option>
 
                             </select>
 
