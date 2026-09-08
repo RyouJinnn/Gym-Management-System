@@ -306,6 +306,11 @@ rel="stylesheet">
         Approved
     </option>
 
+    <option value="Declined"
+    <?= $status === 'Declined' ? 'selected' : '' ?>>
+    Declined
+    </option>
+
 </select>
 
     <button
@@ -459,19 +464,25 @@ rel="stylesheet">
 
                             <td>
 
-                                <?php if ($row['payment_status'] === 'Approved'): ?>
+                               <?php if ($row['payment_status'] === 'Approved'): ?>
 
-                                    <span class="status-badge active">
-                                        Approved
-                                    </span>
+    <span class="status-badge active">
+        Approved
+    </span>
 
-                                <?php else: ?>
+<?php elseif ($row['payment_status'] === 'Declined'): ?>
 
-                                    <span class="status-badge pending">
-                                        Pending
-                                    </span>
+    <span class="status-badge declined">
+        Declined
+    </span>
 
-                                <?php endif; ?>
+<?php else: ?>
+
+    <span class="status-badge pending">
+        Pending
+    </span>
+
+<?php endif; ?>
 
                             </td>
 
