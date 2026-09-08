@@ -44,53 +44,29 @@ background:rgba(0,0,0,.82);
 }
 
 .container{
-width:90%;
-max-width:1500px;
-min-height:90vh;
-display:flex;
-background:linear-gradient(rgba(0,0,0,.65),rgba(0,0,0,.65)), url("logofit.png");
-background-repeat:no-repeat;
-background-size:70%;
-background-position:center;
-background-color:#000;
-border-radius:20px;
-overflow:hidden;
-position:relative;
-z-index:2;
-}
-
-.left{
-flex:1;
-display:flex;
-align-items:center;
-padding:70px;
-}
-
-.left-content h1{
-font-family:'Orbitron',sans-serif;
-font-size:72px;
-line-height:.92;
-color:#d9d9d9;
-}
-
-.left-content span{
-    color:#39ff14;
-}
-
-.left-content p{
-color:#fff;
-margin-top:30px;
-font-size:22px;
-line-height:1.8;
-max-width:420px;
+    width:90%;
+    max-width:750px;
+    min-height:90vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    background:linear-gradient(rgba(0,0,0,.65),rgba(0,0,0,.65)), url("logofit.png");
+    background-repeat:no-repeat;
+    background-size:70%;
+    background-position:center;
+    background-color:#000;
+    border-radius:20px;
+    overflow:hidden;
+    position:relative;
+    z-index:2;
 }
 
 .right{
-flex:1;
-display:flex;
-justify-content:center;
-align-items:center;
-padding:60px;
+    width:100%;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    padding:60px;
 }
 
 .form-container{
@@ -116,13 +92,13 @@ margin-bottom:15px;
 
 .logo h2{
 color:#fff;
-font-size:44px;
+font-size:35px;
 margin-bottom:10px;
 }
 
 .logo p{
 color:#39ff14;
-font-size:18px;
+font-size:15px;
 line-height:1.7;
 }
 
@@ -139,13 +115,13 @@ align-items:center;
 
 .icon i{
 color:#39ff14;
-font-size:34px;
+font-size:28px;
 }
 
 .description{
 color:#fff;
 text-align:center;
-font-size:20px;
+font-size:14px;
 line-height:1.8;
 margin-bottom:30px;
 }
@@ -162,7 +138,7 @@ background:#1b1b1b;
 border:1px solid rgba(255,255,255,.18);
 border-radius:10px;
 color:#fff;
-font-size:16px;
+font-size:14px;
 transition:.3s;
 }
 
@@ -178,7 +154,7 @@ right:18px;
 top:17px;
 color:#bfbfbf;
 cursor:pointer;
-font-size:20px;
+font-size:15px;
 line-height:1;
 }
 
@@ -208,7 +184,7 @@ border:none;
 border-radius:10px;
 background:#39ff14;
 color:#000;
-font-size:22px;
+font-size:17px;
 font-weight:bold;
 cursor:pointer;
 transition:.3s;
@@ -292,24 +268,8 @@ margin-bottom:22px;
 <body>
 
 <div class="container">
-<div class="left">
-<div class="left-content">
 
-<h1>
-<span>FIT</span><br>
-FUNCTION<br>
-<span>GYM</span>
-</h1>
-
-<p>
-Create a new password to secure your account and continue your fitness journey.
-</p>
-
-</div>
-
-</div>
-
-<div class="right">
+    <div class="right">
 
 <div class="form-container">
 
