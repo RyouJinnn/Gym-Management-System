@@ -161,7 +161,7 @@ body::before{
     color:#fff;
     border:1px solid rgba(255,255,255,.12);
     border-radius:8px;
-    font-size:39ff14px;
+    font-size:14px;
     appearance:none;
     -webkit-appearance:none;
     -moz-appearance:none;
@@ -732,54 +732,17 @@ function validateEmail(force = false){
     if(!force && !touched.email) return true;
 
     const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    const value = email.value.trim();
 
-    if(email.value.trim() === ""){
+    if(value === ""){
         return setError(email, emailError, "Email Address is required.");
     }
 
-    if(!regex.test(email.value)){
+    if(!regex.test(value)){
         return setError(email, emailError, "Please enter a valid email address.");
     }
 
-    fetch("check_email.php",{
-
-        method:"POST",
-
-        headers:{
-            "Content-Type":"application/x-www-form-urlencoded"
-        },
-
-        body:"email="+encodeURIComponent(email.value)
-
-    })
-
-    .then(response=>response.text())
-
-    .then(data=>{
-
-        data = data.trim();
-
-        if(data === "exists"){
-
-            setError(
-                email,
-                emailError,
-                "This email is already registered."
-            );
-
-        }else{
-
-            setSuccess(
-                email,
-                emailError,
-                "This email is available for registration."
-            );
-
-        }
-
-    });
-
-    return true;
+    return setSuccess(email, emailError, "Valid Email Address");
 }
 
 email.addEventListener("focus", () => {
@@ -799,54 +762,60 @@ form.addEventListener("submit", function(e){
     e.preventDefault();
 
     const valid =
-        validateFirstname(true) &&
-        validateLastname(true) &&
-        validateContact(true) &&
-        validateGender(true) &&
-        validateBirthdate(true) &&
-        validatePassword(true) &&
-        validateConfirmPassword(true);
+    validateFirstname(true) &&
+    validateLastname(true) &&
+    validateEmail(true) &&
+    validateContact(true) &&
+    validateGender(true) &&
+    validateBirthdate(true) &&
+    validatePassword(true) &&
+    validateConfirmPassword(true);
 
     if(!valid){
         return;
     }
 
-    fetch("check_email.php",{
+fetch("check_email.php",{
+    method:"POST",
+    headers:{
+        "Content-Type":"application/x-www-form-urlencoded"
+    },
+    body:"email="+encodeURIComponent(email.value.trim())
+})
+.then(response => {
+    if(!response.ok){
+        throw new Error("check_email.php returned HTTP " + response.status);
+    }
 
-        method:"POST",
+    return response.text();
+})
+.then(data => {
 
-        headers:{
-            "Content-Type":"application/x-www-form-urlencoded"
-        },
+    data = data.trim();
 
-        body:"email="+encodeURIComponent(email.value)
+    if(data === "exists"){
+        setError(
+            email,
+            emailError,
+            "This email is already registered."
+        );
 
-    })
+        email.focus();
+        return;
+    }
 
-    .then(response=>response.text())
+    contact.value = iti.getNumber();
 
-    .then(data=>{
+    form.submit();
 
-        data = data.trim();
+})
+.catch(error => {
 
-        if(data === "exists"){
+    console.error(error);
 
-            setError(
-                email,
-                emailError,
-                "This email is already registered."
-            );
+    alert("Unable to check the email address. Please try again.");
 
-            email.focus();
-
-            return;
-        }
-
-        contact.value = iti.getNumber();
-
-        form.submit();
-
-    });
+});
 
 });
 
@@ -1113,29 +1082,6 @@ function togglePassword(id,icon){
     }
 
 }
-
-form.addEventListener("submit", function(e){
-
-    const valid =
-        validateFirstname(true) &&
-        validateLastname(true) &&
-        validateEmail(true) &&
-        validateContact(true) &&
-        validateGender(true) &&
-        validateBirthdate(true) &&
-        validatePassword(true) &&
-        validateConfirmPassword(true);
-
-    if(!valid){
-        e.preventDefault();
-        return false;
-    }
-
-    contact.value = iti.getNumber();
-
-    return true;
-
-});
 
 </script>
 
