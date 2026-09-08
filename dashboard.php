@@ -18,17 +18,17 @@ $user = $result->fetch_assoc();
 
 $fullname = trim($user['first_name'] . " " . $user['last_name']);
 $stmt = $con->prepare("
-SELECT
-    membership_id,
-    plan_name,
-    start_date,
-    end_date,
-    status
-FROM membership
-WHERE member_id = ?
-AND status='Active'
-AND end_date>=CURDATE()
-LIMIT 1
+    SELECT
+        membership_id,
+        plan_name,
+        start_date,
+        end_date,
+        status
+    FROM membership
+    WHERE member_id = ?
+    AND status='Active'
+    AND end_date>=CURDATE()
+    LIMIT 1
 ");
 
 $stmt->bind_param("i",$user['id']);
@@ -37,6 +37,25 @@ $stmt->execute();
 $membershipResult=$stmt->get_result();
 $hasMembership=$membershipResult->num_rows>0;
 $membership=$membershipResult->fetch_assoc();
+
+
+// CHECK FOR PENDING PAYMENT
+$pendingStmt = $con->prepare("
+    SELECT payment_id
+    FROM payments
+    WHERE member_id = ?
+    AND payment_status = 'Pending'
+    ORDER BY payment_id DESC
+    LIMIT 1
+");
+
+$pendingStmt->bind_param("i", $user['id']);
+$pendingStmt->execute();
+
+$pendingResult = $pendingStmt->get_result();
+$hasPendingPayment = $pendingResult->num_rows > 0;
+
+$pendingStmt->close();
 
 $daysRemaining = 0;
 if($hasMembership){
@@ -637,13 +656,22 @@ color:#000;
 
                 <h2>Hello, <?php echo htmlspecialchars($user['first_name']); ?>!</h2>
 
-                <?php if($hasMembership): ?>
+<?php if($hasMembership): ?>
 
 <p>
 
-Keep up the great work! Your membership is active.
-Track your attendance, view your membership card,
-and continue your fitness journey.
+    Keep up the great work! Your membership is active.
+    Track your attendance, view your membership card,
+    and continue your fitness journey.
+
+</p>
+
+<?php elseif($hasPendingPayment): ?>
+
+<p>
+
+    Your membership payment is currently pending.
+    Please wait while our staff reviews and approves your payment.
 
 </p>
 
@@ -651,9 +679,9 @@ and continue your fitness journey.
 
 <p>
 
-We're excited to have you as part of the Fit Function Gym family.
-Complete your profile, activate your membership,
-and start your fitness journey today.
+    We're excited to have you as part of the Fit Function Gym family.
+    Complete your profile, activate your membership,
+    and start your fitness journey today.
 
 </p>
 
@@ -667,6 +695,14 @@ and start your fitness journey today.
 
 </button>
 
+<?php elseif($hasPendingPayment): ?>
+
+<button onclick="location.href='payment_history.php'">
+
+    View Payment
+
+</button>
+
 <?php else: ?>
 
 <button onclick="location.href='membership_db.php'">
@@ -677,9 +713,8 @@ and start your fitness journey today.
 
 <?php endif; ?>
 
-            </div>
-
-        </section>
+</div>
+</section>
 
         <?php if($hasMembership): ?>
 
@@ -747,6 +782,63 @@ and start your fitness journey today.
 
 <?php endif; ?>
 
+<?php if($hasPendingPayment && !$hasMembership): ?>
+
+<section class="membership-status">
+
+    <h2>
+        <i class="fa-solid fa-clock"></i>
+        Pending Membership
+    </h2>
+
+    <div class="membership-grid">
+
+        <div class="info-box">
+
+            <h4>Status</h4>
+
+            <p>Waiting for Approval</p>
+
+        </div>
+
+        <div class="info-box">
+
+            <h4>Payment</h4>
+
+            <p>Pending</p>
+
+        </div>
+
+        <div class="info-box">
+
+            <h4>Membership</h4>
+
+            <p>Under Review</p>
+
+        </div>
+
+        <div class="info-box">
+
+            <h4>Next Step</h4>
+
+            <p>Please Wait</p>
+
+        </div>
+
+    </div>
+
+    <button
+        class="card-btn"
+        onclick="location.href='payment_history.php'">
+
+        View Payment History
+
+    </button>
+
+</section>
+
+<?php endif; ?>
+
 <?php if($hasMembership): ?>
 
 <section class="quick-actions">
@@ -803,7 +895,7 @@ and start your fitness journey today.
 
 <?php endif; ?>
 
-       <?php if (!$isProfileComplete || !$hasMembership): ?>
+       <?php if (!$isProfileComplete || (!$hasMembership && !$hasPendingPayment)): ?>
 
 <h2 class="section-title">
     Get Started
@@ -833,7 +925,7 @@ and start your fitness journey today.
 
     <?php endif; ?>
 
-    <?php if (!$hasMembership): ?>
+    <?php if (!$hasMembership && !$hasPendingPayment): ?>
 
     <div class="card">
 
