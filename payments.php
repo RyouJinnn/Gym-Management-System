@@ -232,12 +232,7 @@ if (isset($_POST['pay_now'])) {
     ==========================================
     */
 
-    if ($paymentMethod === "Pay at Counter") {
-        $paymentStatus = "Pending";
-    } else {
-        $paymentStatus = "Approved";
-    }
-
+    $paymentStatus = "Pending";
 
     /*
     ==========================================
@@ -301,64 +296,6 @@ if (isset($_POST['pay_now'])) {
     $paymentId = $paymentStmt->insert_id;
 
     $paymentStmt->close();
-
-
-    /*
-    ==========================================
-    CREATE MEMBERSHIP
-    ==========================================
-    */
-
-    if ($paymentStatus === "Approved") {
-
-        $startDate = date("Y-m-d");
-
-        $endDate = date(
-            "Y-m-d",
-            strtotime("+{$durationDays} days")
-        );
-
-        $membershipStatus = "Active";
-
-        $membershipStmt = $con->prepare("
-            INSERT INTO membership
-            (
-                member_id,
-                plan_id,
-                plan_name,
-                price,
-                duration,
-                start_date,
-                end_date,
-                status
-            )
-            VALUES
-            (?, ?, ?, ?, ?, ?, ?, ?)
-        ");
-
-        if (!$membershipStmt) {
-            die("Membership SQL Error: " . $con->error);
-        }
-
-        $membershipStmt->bind_param(
-            "iisdisss",
-            $user['id'],
-            $planId,
-            $planName,
-            $price,
-            $durationDays,
-            $startDate,
-            $endDate,
-            $membershipStatus
-        );
-
-        if (!$membershipStmt->execute()) {
-            die("Failed to create membership: " . $membershipStmt->error);
-        }
-
-        $membershipStmt->close();
-    }
-
 
     /*
     ==========================================
