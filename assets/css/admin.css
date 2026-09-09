@@ -11745,3 +11745,46 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 .file-box input[type="file"]::file-selector-button:hover {
     background: #2ee600;
 }
+
+.dashboard-overview-header{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    margin-bottom:25px;
+}
+
+.dashboard-overview-header .dashboard-title{
+    margin:0;
+}
+
+.scan-member-btn{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:10px;
+
+    padding:12px 22px;
+
+    background:transparent;
+    border:2px solid #39FF14;
+    border-radius:10px;
+
+    color:#39FF14;
+    text-decoration:none;
+
+    font-family:'Poppins',sans-serif;
+    font-size:16px;
+    font-weight:600;
+
+    transition:all .2s ease;
+}
+
+.scan-member-btn i{
+    font-size:18px;
+}
+
+.scan-member-btn:hover{
+    background:#39FF14;
+    color:#000;
+    transform:translateY(-2px);
+}
