@@ -1,6 +1,21 @@
 <?php
 session_start();
 include("connect.php");
+
+if (isset($_SESSION['admin_id'])) {
+
+    $backPage = "dashboard_admin.php";
+
+} elseif (isset($_SESSION['staff_id'])) {
+
+    $backPage = "staff_dashboard.php";
+
+} else {
+
+    header("Location: login.php");
+    exit;
+
+}
 ?>
 
 <!DOCTYPE html>
@@ -276,10 +291,8 @@ grid-template-columns:1fr;
 
 <body>
 
-<a href="dashboard.php" class="back-btn">
-
-<i class="fa-solid fa-arrow-left"></i>
-
+<a href="<?php echo $backPage; ?>" class="back-btn">
+    <i class="fa-solid fa-arrow-left"></i>
 </a>
 
 <div class="container">
