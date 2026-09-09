@@ -203,9 +203,18 @@ href="assets/css/admin.css">
 
 <div class="dashboard-content">
 
-    <h2 class="dashboard-title">
-        Dashboard Overview
-    </h2>
+    <div class="dashboard-overview-header">
+
+        <h2 class="dashboard-title">
+            Dashboard Overview
+        </h2>
+
+        <a href="scan_member.php" class="scan-member-btn">
+            <i class="fa-solid fa-qrcode"></i>
+            Scan Member
+        </a>
+
+    </div>
 
     <div class="stats-grid">
 
@@ -481,23 +490,14 @@ echo "<strong>"
 echo "No contact messages.";
 
 }
-
 ?>
-
 </span>
-
 </div>
-
 </div>
-
-        </div>
-
-    <!-- System Overview -->
-
+</div>
+       
     <div class="overview-card">
-
         <h2>
-
             <i class="fa-solid fa-chart-simple"></i>
 
             System Overview
@@ -549,19 +549,11 @@ echo "No contact messages.";
                 <?php echo $totalAttendance; ?>
 
             </strong>
-
         </div>
-
     </div>
-
 </div>
-
 </div>
-
 </div>
-
 </div>
-
 </body>
-
 </html>
