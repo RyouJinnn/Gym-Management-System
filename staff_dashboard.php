@@ -1,7 +1,5 @@
 <?php
-
 require_once("includes/staff_auth.php");
-
 
 /* ===========================
    TOTAL MEMBERS
@@ -183,16 +181,9 @@ mysqli_fetch_assoc($latestAttendanceQuery);
 
 <!-- SAME CSS AS ADMIN -->
 
-<link
-    rel="stylesheet"
-    href="assets/css/admin.css"
->
-
+<link rel="stylesheet" href="assets/css/admin.css">
 </head>
-
-
 <body>
-
 
 <div class="wrapper">
 
@@ -201,12 +192,9 @@ mysqli_fetch_assoc($latestAttendanceQuery);
 <div class="main">
     <?php include("includes/staff_header.php"); ?>
 
-    <!-- ===========================
-         DASHBOARD CONTENT
-    =========================== -->
+<div class="dashboard-content">
 
-    <div class="dashboard-content">
-
+    <div class="dashboard-overview-header">
 
         <h2 class="dashboard-title">
 
@@ -214,12 +202,14 @@ mysqli_fetch_assoc($latestAttendanceQuery);
 
         </h2>
 
+        <a href="scan_member.php" class="scan-member-btn">
+            <i class="fa-solid fa-qrcode"></i>
+            Scan Member
+        </a>
 
-        <!-- ===========================
-             STATISTICS
-        =========================== -->
+    </div>
 
-        <div class="stats-grid">
+    <div class="stats-grid">
 
 
             <!-- TOTAL MEMBERS -->
@@ -647,25 +637,11 @@ mysqli_fetch_assoc($latestAttendanceQuery);
                     <strong>
                         <?php echo $totalAttendance; ?>
                     </strong>
-
                 </div>
-
-
             </div>
-
-
         </div>
-
-
     </div>
-
-
 </div>
-
-
 </div>
-
-
 </body>
-
 </html>
