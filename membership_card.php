@@ -197,6 +197,27 @@ width:65px;
 
 }
 
+.back-dashboard-btn{
+    margin-top:20px;
+    width:320px;
+    height:55px;
+    background:transparent;
+    border:2px solid #39ff14;
+    border-radius:14px;
+    color:#39ff14;
+    font-size:16px;
+    font-weight:700;
+    cursor:pointer;
+    transition:.3s;
+}
+
+.back-dashboard-btn:hover{
+    background:#39ff14;
+    color:#000;
+    transform:translateY(-3px);
+    box-shadow:0 0 20px rgba(57,255,20,.4);
+}
+
 .top-bar h1{
 
 font-family:Orbitron;
@@ -546,8 +567,22 @@ transform:rotate(-15deg);
 </div>
 
 <button
+class="back-dashboard-btn"
+onclick="location.href='dashboard.php'">
+
+<i class="fa-solid fa-arrow-left"></i>
+
+Back to Dashboard
+</button>
+
+<button
 class="download-btn"
 onclick="downloadCard()">
+
+<i class="fa-solid fa-download"></i>
+
+Download Membership Card
+</button>
 
 <i class="fa-solid fa-download"></i>
 
@@ -569,13 +604,10 @@ function downloadCard(){
         let link=document.createElement("a");
 
         link.download="Membership-Card-<?= str_pad($user['id'],5,'0',STR_PAD_LEFT); ?>.png";
-
         link.href=canvas.toDataURL("image/png");
-
         link.click();
 
     });
-
 }
 
 </script>
