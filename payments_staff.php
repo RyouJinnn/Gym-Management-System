@@ -104,10 +104,6 @@ $stmt->execute();
 
 $result = $stmt->get_result();
 
-// ================================
-// TOTAL PAYMENTS
-// ================================
-
 $totalPayments = 0;
 $totalAmount = 0;
 
@@ -116,6 +112,7 @@ $countResult = $con->query("
         COUNT(*) AS total_payments,
         COALESCE(SUM(amount), 0) AS total_amount
     FROM payments
+    WHERE payment_status = 'Approved'
 ");
 
 if ($countResult) {
@@ -769,5 +766,7 @@ else if (paymentParams.get("error") === "1") {
 }
 
 </script>
+
+
 </body>
 </html>
