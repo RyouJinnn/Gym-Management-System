@@ -37,6 +37,9 @@ $qrFile = "qrcodes/".$memberCode.".png";
 
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
 
+<link rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+
 <style>
 
 body{
@@ -95,6 +98,50 @@ font-size:18px;
 
 }
 
+.back-btn{
+
+display:inline-flex;
+
+align-items:center;
+
+justify-content:center;
+
+gap:8px;
+
+margin-top:20px;
+
+padding:12px 25px;
+
+border:2px solid #39ff14;
+
+border-radius:12px;
+
+background:transparent;
+
+color:#39ff14;
+
+text-decoration:none;
+
+font-size:16px;
+
+font-weight:600;
+
+transition:.3s;
+
+}
+
+.back-btn:hover{
+
+background:#39ff14;
+
+color:#000;
+
+transform:translateY(-2px);
+
+box-shadow:0 0 15px rgba(57,255,20,.35);
+
+}
+
 </style>
 
 </head>
@@ -108,6 +155,11 @@ font-size:18px;
 <h2><?= $memberCode ?></h2>
 
 <p>Present this QR Code to the receptionist.</p>
+
+<a href="dashboard.php" class="back-btn">
+    <i class="fa-solid fa-arrow-left"></i>
+    Back to Dashboard
+</a>
 
 </div>
 
