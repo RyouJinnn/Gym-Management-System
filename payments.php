@@ -167,7 +167,6 @@ if (isset($_POST['pay_now'])) {
     $paymentMethod = trim($_POST['payment_method'] ?? '');
 
     $allowedMethods = [
-    "Credit Card",
     "GCash",
     "Pay at Counter"
 ];
@@ -788,15 +787,11 @@ align-items:flex-start;
 
 }
 
-/* ============================= */
-/* PAYMENT OPTIONS */
-/* ============================= */
-
 .payment-options{
 
     display:grid;
 
-    grid-template-columns:repeat(3,1fr);
+    grid-template-columns:repeat(2,1fr);
 
     gap:18px;
 
@@ -1213,19 +1208,6 @@ align-items:flex-start;
 
             </label>
 
-            <label class="payment-card" data-method="card">
-
-                <input
-                    type="radio"
-                    name="payment_method"
-                    value="Credit Card">
-
-                <i class="fa-solid fa-credit-card"></i>
-
-                <span>Credit Card</span>
-
-            </label>
-
             <label class="payment-card" data-method="counter">
 
                 <input
@@ -1300,47 +1282,6 @@ align-items:flex-start;
 
         </div>
 
-        <!-- ========================= -->
-        <!-- CREDIT CARD -->
-        <!-- ========================= -->
-
-        <div id="cardSection"
-             class="payment-section"
-             style="display:none;">
-
-            <h3>Credit Card</h3>
-
-            <input
-                type="text"
-                name="card_name"
-                placeholder="Cardholder Name"
-                >
-
-            <input
-                type="text"
-                name="card_number"
-                placeholder="Card Number"
-                maxlength="19"
-                >
-
-            <div class="card-row">
-
-                <input
-                    type="text"
-                    name="expiry"
-                    placeholder="MM / YY"
-                    maxlength="5"
-                    >
-
-                <input
-                    type="password"
-                    name="cvv"
-                    placeholder="CVV"
-                    maxlength="4"
-                    >
-            </div>
-        </div>
-
         <div id="counterSection"
              class="payment-section"
              style="display:none;">
@@ -1381,7 +1322,6 @@ align-items:flex-start;
 const paymentCards = document.querySelectorAll(".payment-card");
 
 const gcashSection = document.getElementById("gcashSection");
-const cardSection = document.getElementById("cardSection");
 const counterSection = document.getElementById("counterSection");
 const payButton = document.getElementById("payButton");
 
@@ -1396,7 +1336,6 @@ paymentCards.forEach(card=>{
         const method=this.dataset.method;
 
         gcashSection.style.display="none";
-        cardSection.style.display="none";
         counterSection.style.display="none";
 
         proofInput.required=false;
@@ -1406,12 +1345,6 @@ paymentCards.forEach(card=>{
             gcashSection.style.display="block";
 
             proofInput.required=true;
-
-        }
-
-        if(method==="card"){
-
-            cardSection.style.display="block";
 
         }
 
@@ -1430,64 +1363,6 @@ paymentCards.forEach(card=>{
     });
 
 });
-
-/* Credit Card Formatting */
-
-const cardNumber=document.querySelector('input[name="card_number"]');
-
-if(cardNumber){
-
-cardNumber.addEventListener("input",function(){
-
-    let value=this.value.replace(/\D/g,"");
-
-    value=value.substring(0,16);
-
-    value=value.replace(/(.{4})/g,"$1 ").trim();
-
-    this.value=value;
-
-});
-
-}
-
-/* Expiry MM/YY */
-
-const expiry=document.querySelector('input[name="expiry"]');
-
-if(expiry){
-
-expiry.addEventListener("input",function(){
-
-    let value=this.value.replace(/\D/g,"");
-
-    value=value.substring(0,4);
-
-    if(value.length>2){
-
-        value=value.substring(0,2)+"/"+value.substring(2);
-
-    }
-
-    this.value=value;
-
-});
-
-}
-
-/* CVV */
-
-const cvv=document.querySelector('input[name="cvv"]');
-
-if(cvv){
-
-cvv.addEventListener("input",function(){
-
-    this.value=this.value.replace(/\D/g,"");
-
-});
-
-}
 
 const proofInput = document.getElementById("proof");
 const uploadText = document.getElementById("uploadText");
@@ -1511,11 +1386,8 @@ proofInput.addEventListener("change", function(){
             previewImage.style.display = "block";
 
         };
-
         reader.readAsDataURL(file);
-
     }
-
 });
 
 </script>
