@@ -322,16 +322,12 @@ if(isset($_SESSION['verify_error'])){
                 <small id="codeError" class="error"></small>
 
                 <div class="resend">
-    <span id="resendMessage">Didn't receive the code?</span>
+    Didn't receive the code?
+    <a href="javascript:void(0)" id="resendLink">Resend Code</a>
 
     <span id="timerContainer">
-        Resend Code available in
-        <span id="timer">01:00</span>
+        (<span id="timer">01:00</span>)
     </span>
-
-    <a href="javascript:void(0)" id="resendLink" style="display:none;">
-        Resend Code
-    </a>
 </div>
 
                 <button type="submit">
@@ -490,12 +486,9 @@ inputs.forEach(box=>{
 
 });
 
-// ================= TIMER =================
-
 const resend = document.getElementById("resendLink");
 const timer = document.getElementById("timer");
 const timerContainer = document.getElementById("timerContainer");
-const resendMessage = document.getElementById("resendMessage");
 
 let countdown;
 
@@ -503,9 +496,9 @@ function startCountdown(endTime){
 
     clearInterval(countdown);
 
-    resend.style.display = "none";
+    resend.style.pointerEvents = "none";
+    resend.style.opacity = ".5";
     timerContainer.style.display = "inline";
-    resendMessage.style.display = "inline";
 
     countdown = setInterval(function(){
 
@@ -515,9 +508,9 @@ function startCountdown(endTime){
 
             clearInterval(countdown);
 
+            resend.style.pointerEvents = "auto";
+            resend.style.opacity = "1";
             timerContainer.style.display = "none";
-            resendMessage.style.display = "inline";
-            resend.style.display = "inline";
 
             return;
         }
@@ -532,7 +525,10 @@ function startCountdown(endTime){
     },1000);
 
     // Update immediately
-    const seconds = Math.max(0, Math.floor((endTime - Date.now()) / 1000));
+    const seconds = Math.max(
+        0,
+        Math.floor((endTime - Date.now()) / 1000)
+    );
 
     const minutes = Math.floor(seconds / 60);
     const secs = seconds % 60;
@@ -560,16 +556,18 @@ window.addEventListener("load", function(){
         sessionStorage.setItem("verifyTimerEnd", endTime);
 
         startCountdown(endTime);
+
     }
 
 });
 
-
-// ================= RESEND CODE =================
-
 resend.addEventListener("click", function(e){
 
     e.preventDefault();
+
+    if(resend.style.pointerEvents === "none"){
+        return;
+    }
 
     const endTime = Date.now() + 60000;
 
@@ -582,7 +580,6 @@ resend.addEventListener("click", function(e){
 });
 
 </script>
-
 </body>
 </html>
 
