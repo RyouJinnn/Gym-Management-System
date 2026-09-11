@@ -1,34 +1,49 @@
 <?php
+
 include("connect.php");
 
 header("Content-Type: application/json");
 
 if(!isset($_POST['member_code'])){
+
     echo json_encode([
         "status"=>"error",
         "message"=>"No QR Code received."
     ]);
+
     exit();
 }
 
 $memberCode = trim($_POST['member_code']);
 
 if(!preg_match('/^M\d{5}$/',$memberCode)){
+
     echo json_encode([
         "status"=>"error",
         "message"=>"Invalid QR Code."
     ]);
+
     exit();
 }
 
 $memberID = intval(substr($memberCode,1));
 
-/* Get member and active membership */
+/* ===========================
+   GET MEMBER INFORMATION
+=========================== */
+
 $stmt = $con->prepare("
 SELECT
     signup.id,
     signup.first_name,
+    signup.middlename,
     signup.last_name,
+    signup.suffix,
+    signup.email,
+    signup.contact_number,
+    signup.gender,
+    signup.birthdate,
+    signup.address,
     signup.profile_picture,
     membership.plan_name,
     membership.status,
@@ -59,7 +74,11 @@ if($result->num_rows==0){
 }
 
 $member = $result->fetch_assoc();
-/* No membership record */
+
+
+/* ===========================
+   NO MEMBERSHIP
+=========================== */
 
 if(empty($member['plan_name'])){
 
@@ -72,7 +91,10 @@ if(empty($member['plan_name'])){
 
 }
 
-/* Pending */
+
+/* ===========================
+   PENDING
+=========================== */
 
 if($member['status']=="Pending"){
 
@@ -85,7 +107,10 @@ if($member['status']=="Pending"){
 
 }
 
-/* Inactive */
+
+/* ===========================
+   INACTIVE
+=========================== */
 
 if($member['status']=="Inactive"){
 
@@ -98,9 +123,15 @@ if($member['status']=="Inactive"){
 
 }
 
-/* Expired */
 
-if(strtotime($member['end_date']) < strtotime(date("Y-m-d"))){
+/* ===========================
+   EXPIRED
+=========================== */
+
+if(
+    empty($member['end_date']) ||
+    strtotime($member['end_date']) < strtotime(date("Y-m-d"))
+){
 
     echo json_encode([
         "status"=>"expired",
@@ -111,7 +142,10 @@ if(strtotime($member['end_date']) < strtotime(date("Y-m-d"))){
 
 }
 
-/* Check today's attendance */
+
+/* ===========================
+   CHECK TODAY'S ATTENDANCE
+=========================== */
 
 $stmt = $con->prepare("
 SELECT *
@@ -126,44 +160,16 @@ $stmt->execute();
 
 $attendance = $stmt->get_result();
 
-$currentTime = date("H:i:s");
+
+/* ===========================
+   DETERMINE AVAILABLE ACTION
+=========================== */
 
 if($attendance->num_rows==0){
 
-    /* FIRST SCAN (CHECK-IN) */
-
-    $status="Present";
-
-    $stmt=$con->prepare("
-    INSERT INTO attendance
-    (
-        member_id,
-        check_in,
-        attendance_date,
-        status
-    )
-    VALUES
-    (
-        ?,
-        ?,
-        CURDATE(),
-        ?
-    )
-    ");
-
-    $stmt->bind_param(
-    "iss",
-    $memberID,
-    $currentTime,
-    $status
-    );
-
-    $stmt->execute();
-
     echo json_encode([
-        "status"=>"check_in",
-        "member"=>$member,
-        "time"=>$currentTime
+        "status"=>"ready_check_in",
+        "member"=>$member
     ]);
 
     exit();
@@ -172,39 +178,24 @@ if($attendance->num_rows==0){
 
 $row = $attendance->fetch_assoc();
 
+
 if(empty($row['check_out'])){
 
-    /* SECOND SCAN (CHECK-OUT) */
-
-    $stmt=$con->prepare("
-    UPDATE attendance
-    SET check_out=?
-    WHERE attendance_id=?
-    ");
-
-    $stmt->bind_param(
-    "si",
-    $currentTime,
-    $row['attendance_id']
-    );
-
-    $stmt->execute();
-
     echo json_encode([
-        "status"=>"check_out",
+        "status"=>"ready_check_out",
         "member"=>$member,
-        "time"=>$currentTime
+        "check_in"=>$row['check_in']
     ]);
 
     exit();
 
 }
 
-/* THIRD SCAN */
-
 echo json_encode([
     "status"=>"completed",
-    "member"=>$member
+    "member"=>$member,
+    "check_in"=>$row['check_in'],
+    "check_out"=>$row['check_out']
 ]);
 
 exit();
