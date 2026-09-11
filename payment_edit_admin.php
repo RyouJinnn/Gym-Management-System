@@ -145,10 +145,9 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     ================================ */
 
     $allowedMethods = [
-        "Credit/Debit Card",
-        "GCash",
-        "Pay at the Counter"
-    ];
+    "GCash",
+    "Pay at the Counter"
+];
 
     $allowedStatuses = [
         "Pending",
@@ -934,19 +933,6 @@ rel="stylesheet">
 
                                 <option value="">
                                     Select Payment Method
-                                </option>
-
-                                <option
-                                    value="Credit/Debit Card"
-                                    <?= (
-                                        $payment['payment_method']
-                                        === "Credit/Debit Card"
-                                    )
-                                        ? 'selected'
-                                        : ''
-                                    ?>
-                                >
-                                    Credit/Debit Card
                                 </option>
 
                                 <option
