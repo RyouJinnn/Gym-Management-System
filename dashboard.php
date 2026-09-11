@@ -635,6 +635,38 @@ color:#000;
 
 }
 
+.dashboard-profile-link{
+    width:52px;
+    height:52px;
+    border:2px solid #39ff14;
+    border-radius:50%;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    overflow:hidden;
+    background:#111;
+    transition:.3s;
+    margin-left:auto;
+    margin-bottom:15px;
+}
+
+.dashboard-profile-link:hover{
+    transform:scale(1.08);
+    box-shadow:0 0 15px rgba(57,255,20,.35);
+}
+
+.dashboard-profile-link img{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    display:block;
+}
+
+.dashboard-profile-link .default-profile-icon{
+    color:#39ff14;
+    font-size:25px;
+}
+
 </style>
 </head>
 <body>
@@ -645,6 +677,23 @@ color:#000;
     <main class="main">
 
          <div class="dashboard-content">
+
+            <a href="profile.php" class="dashboard-profile-link">
+    <?php if (
+        !empty($user['profile_picture']) &&
+        $user['profile_picture'] !== 'defaultimg.png'
+    ): ?>
+
+        <img
+            src="<?= htmlspecialchars($user['profile_picture']) ?>"
+            alt="Profile Picture">
+
+    <?php else: ?>
+
+        <i class="fa-solid fa-user default-profile-icon"></i>
+
+    <?php endif; ?>
+</a>
    
         <section class="hero">
 
