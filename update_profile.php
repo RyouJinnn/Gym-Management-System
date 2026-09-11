@@ -39,12 +39,9 @@ if ($age < 15 || $age > 100) {
     die("You must be at least 15 years old.");
 }
 
-/* ===========================
-   CONTACT NUMBER VALIDATION
-=========================== */
-
-if (!preg_match('/^09\d{9}$/', $contact_number)) {
-    die("Invalid contact number.");
+if (!preg_match('/^(09\d{9}|\+639\d{9})$/', $contact_number)) {
+    header("Location: profile.php?error=contact");
+    exit();
 }
 
 $address = trim($_POST['address']);
