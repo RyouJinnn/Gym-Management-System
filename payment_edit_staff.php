@@ -139,23 +139,16 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         $_POST['payment_date'] ?? ''
     );
 
-
-    /* ================================
-       VALIDATION
-    ================================ */
-
     $allowedMethods = [
-        "Credit/Debit Card",
-        "GCash",
-        "Pay at the Counter"
-    ];
+    "GCash",
+    "Pay at the Counter"
+];
 
     $allowedStatuses = [
         "Pending",
         "Approved",
         "Declined"
     ];
-
 
     if ($member_id <= 0) {
 
@@ -929,19 +922,6 @@ rel="stylesheet">
 
                                 <option value="">
                                     Select Payment Method
-                                </option>
-
-                                <option
-                                    value="Credit/Debit Card"
-                                    <?= (
-                                        $payment['payment_method']
-                                        === "Credit/Debit Card"
-                                    )
-                                        ? 'selected'
-                                        : ''
-                                    ?>
-                                >
-                                    Credit/Debit Card
                                 </option>
 
                                 <option
