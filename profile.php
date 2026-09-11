@@ -490,6 +490,37 @@ transform:translateY(-2px);
 
 }
 
+.email-btn{
+    background:transparent;
+    color:#39ff14;
+}
+
+.email-btn:hover{
+    background:#39ff14;
+    color:#000;
+    transform:translateY(-2px);
+}
+
+.email-success-message{
+    width:100%;
+    box-sizing:border-box;
+    background:#102a11;
+    color:#39ff14;
+    border:1px solid #39ff14;
+    padding:14px 18px;
+    border-radius:10px;
+    margin:20px 0;
+    font-size:14px;
+    font-weight:600;
+    display:flex;
+    align-items:center;
+    gap:10px;
+}
+
+.email-success-message i{
+    font-size:18px;
+}
+
 input[readonly]{
     background:#151515;
     color:#bdbdbd;
@@ -541,6 +572,28 @@ margin-left:0;
             <h1 class="page-title">
                 My Profile
             </h1>
+
+            <?php if (isset($_GET['email_changed']) && $_GET['email_changed'] === '1'): ?>
+<div class="email-success-message">
+    <i class="fa-solid fa-circle-check"></i>
+    Your email has been changed successfully!
+</div>
+<?php endif; ?>
+
+            <?php if(isset($_GET['error']) && $_GET['error'] === 'contact'): ?>
+    <div style="
+        background:#2a1111;
+        color:#ff4d4d;
+        border:1px solid #ff4d4d;
+        padding:12px 16px;
+        border-radius:8px;
+        margin-bottom:20px;
+        font-size:14px;
+        font-weight:600;
+    ">
+        Please follow the format.
+    </div>
+<?php endif; ?>
 
             <form action="update_profile.php"
                   method="POST"
@@ -612,19 +665,17 @@ value="<?= htmlspecialchars($user['suffix'] ?? '') ?>">
 
             </div>
 
-            <!-- Email -->
-
             <div>
 
-                <label>Email Address</label>
+    <label>Email Address</label>
 
-                <input
-                type="email"
-                name="email"
-                readonly
-                value="<?= htmlspecialchars($user['email']) ?>">
+    <input
+        type="email"
+        name="email"
+        readonly
+        value="<?= htmlspecialchars($user['email']) ?>">
 
-            </div>
+</div>
 
              <!-- Gender -->
 
@@ -660,13 +711,13 @@ value="<?= htmlspecialchars($user['suffix'] ?? '') ?>">
 
                 <label>Contact Number</label>
 
-               <input
+<input
 type="tel"
 id="contact"
 name="contact_number"
 value="<?= htmlspecialchars($user['contact_number']) ?>"
-maxlength="11"
-placeholder="09XXXXXXXXX"
+maxlength="13"
+placeholder="09XXXXXXXXX or +639XXXXXXXXX"
 autocomplete="off"
 required>
             </div>
@@ -766,6 +817,16 @@ disabled>
         Change Password
 
     </button>
+
+    <button
+    type="button"
+    class="profile-btn email-btn"
+    onclick="window.location='change_email.php'">
+
+    <i class="fa-solid fa-envelope"></i>
+    Change Email
+
+</button>
 
 </div>
 
@@ -986,17 +1047,24 @@ const contact = document.getElementById("contact");
 
 contact.addEventListener("input", function () {
 
-    // Keep numbers only
-    this.value = this.value.replace(/\D/g, "");
+    // Allow only + at the beginning and numbers
+    this.value = this.value
+        .replace(/(?!^\+)\D/g, "");
 
-    // Maximum 11 digits
-    if (this.value.length > 11) {
-        this.value = this.value.substring(0, 11);
+    // Only one + and only at the beginning
+    if (this.value.indexOf("+") > 0) {
+        this.value = this.value.replace(/\+/g, "");
+    }
+
+    // Maximum 13 characters for +639XXXXXXXXX
+    if (this.value.length > 13) {
+        this.value = this.value.substring(0, 13);
     }
 
     checkChanges();
 
 });
+
 
 contact.addEventListener("keydown", function(e){
 
@@ -1018,10 +1086,17 @@ contact.addEventListener("keydown", function(e){
         return;
     }
 
-    // Only allow numbers
-    if(!/^[0-9]$/.test(e.key)){
-        e.preventDefault();
+    // Allow + only as the first character
+    if(e.key === "+" && this.value.length === 0){
+        return;
     }
+
+    // Allow numbers
+    if(/^[0-9]$/.test(e.key)){
+        return;
+    }
+
+    e.preventDefault();
 
 });
 </script>
