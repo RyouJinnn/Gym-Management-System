@@ -279,6 +279,30 @@ margin-bottom:25px;
 
 }
 
+.back-profile-btn{
+    width:100%;
+    height:52px;
+    margin-top:12px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:8px;
+    border:2px solid #555;
+    border-radius:12px;
+    background:transparent;
+    color:#bdbdbd;
+    text-decoration:none;
+    font-size:14px;
+    font-weight:600;
+    transition:.3s;
+}
+
+.back-profile-btn:hover{
+    border-color:#39ff14;
+    color:#39ff14;
+    transform:translateY(-2px);
+}
+
 /*================ POPUP ================*/
 
 .popup-overlay{
@@ -550,6 +574,11 @@ type="submit">
 Change Password
 
 </button>
+
+<a href="profile.php" class="back-profile-btn">
+    <i class="fa-solid fa-arrow-left"></i>
+    Back to Profile
+</a>    
 
 </div>
 
@@ -843,6 +872,5 @@ showPopup(
 <?php endif; ?>
 
 </script>
-
 </body>
 </html>
