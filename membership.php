@@ -255,7 +255,7 @@ text-align:center;
 
 .methods{
     display:grid;
-    grid-template-columns:repeat(3,1fr);
+    grid-template-columns:repeat(2,1fr);
     gap:25px;
     margin-top:40px;
 }
@@ -509,12 +509,6 @@ After logging in and selecting a membership plan, you can complete your payment 
 </p>
 
 <div class="methods">
-
-    <div class="method">
-        <img src="creditpayment.png" alt="Credit Card">
-        <h3>Credit / Debit Card</h3>
-        <p>Secure online payment using Visa, Mastercard and other supported cards.</p>
-    </div>
 
     <div class="method">
         <img src="gcash.png" alt="GCash">
