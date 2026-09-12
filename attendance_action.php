@@ -1,5 +1,5 @@
 <?php
-
+date_default_timezone_set("Asia/Manila");
 include("connect.php");
 
 header("Content-Type: application/json");
@@ -153,19 +153,29 @@ if(
 }
 
 
+$manilaTime = new DateTime(
+    "now",
+    new DateTimeZone("Asia/Manila")
+);
+
+$today = $manilaTime->format("Y-m-d");
+$currentTime = $manilaTime->format("H:i:s");
+
+
 /* Get today's attendance */
 
 $stmt = $con->prepare("
 SELECT *
 FROM attendance
 WHERE member_id=?
-AND attendance_date=CURDATE()
+AND attendance_date=?
 LIMIT 1
 ");
 
 $stmt->bind_param(
-    "i",
-    $memberID
+    "is",
+    $memberID,
+    $today
 );
 
 $stmt->execute();
@@ -173,13 +183,6 @@ $stmt->execute();
 $attendance =
     $stmt->get_result();
 
-
-$currentTime = date("H:i:s");
-
-
-/* ===========================
-   CHECK IN
-=========================== */
 
 if($action === "check_in"){
 
@@ -213,21 +216,22 @@ if($action === "check_in"){
         attendance_date,
         status
     )
-    VALUES
-    (
-        ?,
-        ?,
-        CURDATE(),
-        ?
-    )
+   VALUES
+(
+    ?,
+    ?,
+    ?,
+    ?
+)
     ");
 
     $stmt->bind_param(
-        "iss",
-        $memberID,
-        $currentTime,
-        $status
-    );
+    "isss",
+    $memberID,
+    $currentTime,
+    $today,
+    $status
+);  
 
 
     if($stmt->execute()){
