@@ -33,30 +33,22 @@ $result = $stmt->get_result();
 if($result->num_rows == 0){
 
     session_destroy();
-
     header("Location: login_admin.php");
     exit();
-
 }
 
 $admin = $result->fetch_assoc();
 
-if($admin['role'] !== "Admin"){
-
-    session_destroy();
+if(strtolower(trim($admin['role'])) !== "admin"){
 
     header("Location: login_admin.php");
     exit();
-
 }
 
-if($admin['status'] !== "Active"){
-
-    session_destroy();
+if(strtolower(trim($admin['status'])) !== "active"){
 
     header("Location: login_admin.php");
     exit();
-
 }
 
 $_SESSION['admin_name'] = $admin['full_name'];
