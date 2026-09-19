@@ -639,25 +639,29 @@ href="assets/css/admin.css">
 
             <div class="form-input-wrapper">
 
-                <input
-                    type="password"
-                    id="password"
-                    name="password"
-                    minlength="8"
-                    maxlength="25"
-                    style="padding-right:45px;"
-                    placeholder="Leave blank to keep current password"
-                >
+    <input
+        type="password"
+        id="password"
+        name="password"
+        minlength="8"
+        maxlength="25"
+        style="padding-right:45px;"
+        placeholder="Leave blank to keep current password"
+    >
 
-                <i
-                    class="fa-solid fa-eye password-toggle"
-                    onclick="togglePassword('password', this)"
-                ></i>
+    <button
+        type="button"
+        class="password-toggle"
+        onclick="togglePassword('password', this)"
+    >
+        <i class="fa-solid fa-eye"></i>
+    </button>
 
-            </div>
+</div>
+
+<div id="passwordError" class="password-error"></div>
 
         </div>
-
 
         <div class="edit-field">
 
@@ -667,22 +671,27 @@ href="assets/css/admin.css">
 
             <div class="form-input-wrapper">
 
-                <input
-                    type="password"
-                    id="confirm_password"
-                    name="confirm_password"
-                    minlength="8"
-                    maxlength="25"
-                    style="padding-right:45px;"
-                    placeholder="Confirm new password"
-                >
+    <input
+        type="password"
+        id="confirm_password"
+        name="confirm_password"
+        minlength="8"
+        maxlength="25"
+        style="padding-right:45px;"
+        placeholder="Confirm new password"
+    >
 
-                <i
-                    class="fa-solid fa-eye password-toggle"
-                    onclick="togglePassword('confirm_password', this)"
-                ></i>
+    <button
+        type="button"
+        class="password-toggle"
+        onclick="togglePassword('confirm_password', this)"
+    >
+        <i class="fa-solid fa-eye"></i>
+    </button>
 
-            </div>
+</div>
+
+<div id="confirmPasswordError" class="password-error"></div>
 
         </div>
 
@@ -861,41 +870,107 @@ href="assets/css/admin.css">
 
 function openEditMemberSaveModal(){
 
+    const form = document.getElementById("editMemberForm");
+
+    if(!form.checkValidity()){
+
+        form.reportValidity();
+
+        return;
+    }
+
     document
         .getElementById("editMemberSaveModal")
         .classList.add("show");
-
 }
-
 
 function closeEditMemberSaveModal(){
 
     document
         .getElementById("editMemberSaveModal")
         .classList.remove("show");
-
 }
-
 
 function confirmEditMemberSave(){
 
     const form = document.getElementById("editMemberForm");
 
+    const password =
+        document.getElementById("password").value;
+
+    const confirmPassword =
+        document.getElementById("confirm_password").value;
+
+    const passwordError =
+        document.getElementById("passwordError");
+
+    const confirmPasswordError =
+        document.getElementById("confirmPasswordError");
+
+    passwordError.textContent = "";
+    passwordError.classList.remove("show");
+
+    confirmPasswordError.textContent = "";
+    confirmPasswordError.classList.remove("show");
+
+    if(password !== ""){
+
+        const strongPassword =
+            password.length >= 8 &&
+            password.length <= 25 &&
+            /[A-Z]/.test(password) &&
+            /[a-z]/.test(password) &&
+            /[0-9]/.test(password) &&
+            /[\W_]/.test(password);
+
+        if(!strongPassword){
+
+            passwordError.textContent =
+                "Password must be 8-25 characters and contain uppercase letter, lowercase letter, number, and special symbol.";
+
+            passwordError.classList.add("show");
+
+            document
+                .getElementById("password")
+                .focus();
+
+            return;
+
+        }
+
+        if(password !== confirmPassword){
+
+            confirmPasswordError.textContent =
+                "Passwords do not match.";
+
+            confirmPasswordError.classList.add("show");
+
+            document
+                .getElementById("confirm_password")
+                .focus();
+
+            return;
+
+        }
+    }
+
     if(!form.checkValidity()){
+
         form.reportValidity();
+
         return;
     }
 
-    const submitButton = document.createElement("button");
+    const submitButton =
+        document.createElement("button");
+
     submitButton.type = "submit";
     submitButton.name = "save_changes";
     submitButton.style.display = "none";
-
     form.appendChild(submitButton);
     submitButton.click();
     submitButton.remove();
 }
-
 
 document
     .getElementById("editMemberSaveModal")
@@ -963,9 +1038,14 @@ profileInput.addEventListener("change", function(){
 
 });
 
-function togglePassword(inputId, icon){
+function togglePassword(inputId, button){
 
     const input = document.getElementById(inputId);
+    const icon = button.querySelector("i");
+
+    if(!input || !icon){
+        return;
+    }
 
     if(input.type === "password"){
 
@@ -985,8 +1065,115 @@ function togglePassword(inputId, icon){
 
 }
 
+const passwordInput = document.getElementById("password");
+const confirmPasswordInput = document.getElementById("confirm_password");
+
+const passwordError = document.getElementById("passwordError");
+const confirmPasswordError = document.getElementById("confirmPasswordError");
+
+
+function validateStrongPassword(){
+
+    const password = passwordInput.value;
+
+    if(password === ""){
+
+        passwordError.textContent = "";
+        passwordError.classList.remove("show");
+
+        return true;
+    }
+
+    const errors = [];
+
+    if(password.length < 8 || password.length > 25){
+        errors.push("8-25 characters");
+    }
+
+    if(!/[A-Z]/.test(password)){
+        errors.push("uppercase letter");
+    }
+
+    if(!/[a-z]/.test(password)){
+        errors.push("lowercase letter");
+    }
+
+    if(!/[0-9]/.test(password)){
+        errors.push("number");
+    }
+
+    if(!/[\W_]/.test(password)){
+        errors.push("special symbol");
+    }
+
+
+    if(errors.length > 0){
+
+        passwordError.textContent =
+            "Password needs: " + errors.join(", ") + ".";
+
+        passwordError.classList.add("show");
+
+        return false;
+
+    }
+
+
+    passwordError.textContent = "";
+    passwordError.classList.remove("show");
+
+    return true;
+}
+
+function validateConfirmPassword(){
+
+    const password = passwordInput.value;
+    const confirmPassword = confirmPasswordInput.value;
+
+    if(confirmPassword === ""){
+
+        confirmPasswordError.textContent = "";
+        confirmPasswordError.classList.remove("show");
+
+        return true;
+    }
+
+    if(password !== confirmPassword){
+
+        confirmPasswordError.textContent =
+            "Passwords do not match.";
+
+        confirmPasswordError.classList.add("show");
+
+        return false;
+    }
+
+    confirmPasswordError.textContent = "";
+    confirmPasswordError.classList.remove("show");
+
+    return true;
+}
+
+passwordInput.addEventListener(
+    "input",
+    function(){
+
+        validateStrongPassword();
+        validateConfirmPassword();
+
+    }
+);
+
+confirmPasswordInput.addEventListener(
+    "input",
+    function(){
+
+        validateConfirmPassword();
+
+    }
+);
+
 </script>
 
 </body>
-
 </html>
