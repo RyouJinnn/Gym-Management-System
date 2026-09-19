@@ -2,18 +2,10 @@
 session_start();
 include("connect.php");
 
-/* ==========================
-   CHECK LOGIN
-========================== */
-
 if (!isset($_SESSION['email'])) {
     header("Location: login.php");
     exit();
 }
-
-/* ==========================
-   GET LOGGED-IN USER
-========================== */
 
 $email = $_SESSION['email'];
 
@@ -51,15 +43,45 @@ $hasMembership = false;
 $membership = [];
 $plan_name = "No Active Plan";
 
+$availablePlans = [];
+
+$planResult = $con->query("
+    SELECT
+        plan_id,
+        plan_name,
+        duration_days,
+        price,
+        description
+    FROM membership_plans
+    WHERE status = 'Active'
+    ORDER BY plan_id ASC
+");
+
+if($planResult){
+
+    while($planRow = $planResult->fetch_assoc()){
+
+        $availablePlans[] = $planRow;
+
+    }
+
+}
+
 $today = date("Y-m-d");
 
 $stmt = $con->prepare("
-    SELECT *
-    FROM membership
-    WHERE member_id = ?
-      AND status = 'Active'
-      AND end_date >= ?
-    ORDER BY end_date DESC
+    SELECT
+        m.*,
+        mp.plan_name,
+        mp.price,
+        mp.duration_days
+    FROM membership m
+    INNER JOIN membership_plans mp
+        ON m.plan_id = mp.plan_id
+    WHERE m.member_id = ?
+      AND m.status = 'Active'
+      AND m.end_date >= ?
+    ORDER BY m.end_date DESC
     LIMIT 1
 ");
 
@@ -617,7 +639,7 @@ align-items:flex-start;
         ₱<?= number_format($membership['price'],2) ?>
         <br><br>
         <strong>Duration:</strong>
-        <?= $membership['duration'] ?> Days
+        <?= (int)$membership['duration_days'] ?> Days
         <br><br>
         <strong>Start Date:</strong><br>
         <?= date("F d, Y", strtotime($membership['start_date'])) ?>
@@ -648,229 +670,96 @@ align-items:flex-start;
 
 <?php if(!$hasMembership){ ?>
 
-<!-- AVAILABLE MEMBERSHIP PLANS -->
-
 <h2 class="section-title" id="plans">
-    Membership Fees
+    Membership Plans
 </h2>
 
 <div class="cards">
 
-    <!-- REGULAR -->
+<?php if(count($availablePlans) > 0): ?>
+
+    <?php foreach($availablePlans as $plan): ?>
+
+        <div class="card">
+
+            <div class="card-icon">
+
+                <i class="fa-solid fa-dumbbell"></i>
+
+            </div>
+
+            <h3>
+                <?= htmlspecialchars($plan['plan_name']) ?>
+            </h3>
+
+            <p>
+
+                <strong>
+                    ₱<?= number_format($plan['price'], 2) ?>
+                </strong>
+
+                <br><br>
+
+                <strong>
+                    Duration:
+                </strong>
+
+                <?= (int)$plan['duration_days'] ?> Days
+
+                <?php if(!empty($plan['description'])): ?>
+
+                    <br><br>
+
+                    <?= htmlspecialchars($plan['description']) ?>
+
+                <?php endif; ?>
+
+            </p>
+
+            <form
+                action="payments.php"
+                method="GET"
+            >
+
+                <input
+                    type="hidden"
+                    name="plan"
+                    value="<?= (int)$plan['plan_id'] ?>"
+                >
+
+                <button type="submit">
+                    Choose Plan
+                </button>
+
+            </form>
+
+        </div>
+
+    <?php endforeach; ?>
+
+<?php else: ?>
 
     <div class="card">
 
-        <div class="card-icon">
-            <i class="fa-solid fa-user"></i>
+        <div class="octagon-icon">
+
+            <i class="fa-solid fa-circle-exclamation"></i>
+
         </div>
 
-        <h3>Regular</h3>
+        <h3>
+            No Plans Available
+        </h3>
 
         <p>
-            <strong>₱499.00</strong>
+            There are currently no active membership plans available.
         </p>
-
-        <form action="payments.php" method="GET">
-
-            <input type="hidden" name="plan" value="1">
-
-            <button type="submit">
-                Choose Plan
-            </button>
-
-        </form>
 
     </div>
 
-    <!-- STUDENT -->
-
-    <div class="card">
-
-        <div class="card-icon">
-            <i class="fa-solid fa-user-graduate"></i>
-        </div>
-
-        <h3>Student</h3>
-
-        <p>
-            <strong>₱299.00</strong>
-        </p>
-
-        <form action="payments.php" method="GET">
-
-            <input type="hidden" name="plan" value="2">
-
-            <button type="submit">
-                Choose Plan
-            </button>
-
-        </form>
-
-    </div>
-
-    <!-- SENIOR -->
-
-    <div class="card">
-
-        <div class="card-icon">
-            <i class="fa-solid fa-person-cane"></i>
-        </div>
-
-        <h3>Senior</h3>
-
-        <p>
-            <strong>₱299.00</strong>
-        </p>
-
-        <form action="payments.php" method="GET">
-
-            <input type="hidden" name="plan" value="3">
-
-            <button type="submit">
-                Choose Plan
-            </button>
-
-        </form>
-
-    </div>
-
-    <!-- DROP-IN -->
-
-    <div class="card">
-
-        <div class="card-icon">
-            <i class="fa-solid fa-door-open"></i>
-        </div>
-
-        <h3>Drop-In</h3>
-
-        <p>
-            <strong>₱199.00</strong>
-        </p>
-
-        <form action="payments.php" method="GET">
-
-            <input type="hidden" name="plan" value="4">
-
-            <button type="submit">
-                Choose Plan
-            </button>
-
-        </form>
-
-    </div>
+<?php endif; ?>
 
 </div>
-
-<h2 class="section-title">
-    Membership Packages
-</h2>
-
-<div class="cards">
-
-    <!-- 3 MONTHS -->
-
-    <div class="card">
-
-        <div class="card-icon">
-            <i class="fa-solid fa-calendar-days"></i>
-        </div>
-
-        <h3>3 Months</h3>
-
-        <p>
-            <strong>₱1,377.00</strong>
-        </p>
-
-        <form action="payments.php" method="GET">
-
-            <input type="hidden" name="plan" value="5">
-
-            <button type="submit">
-                Choose Package
-            </button>
-
-        </form>
-
-    </div>
-
-    <!-- 6 MONTHS -->
-
-    <div class="card">
-
-        <div class="card-icon">
-            <i class="fa-solid fa-calendar-days"></i>
-        </div>
-
-        <h3>6 Months</h3>
-
-        <p>
-            <strong>₱2,754.00</strong>
-        </p>
-
-        <form action="payments.php" method="GET">
-
-            <input type="hidden" name="plan" value="6">
-
-            <button type="submit">
-                Choose Package
-            </button>
-
-        </form>
-
-    </div>
-
-    <!-- 9 MONTHS -->
-
-    <div class="card">
-
-        <div class="card-icon">
-            <i class="fa-solid fa-calendar-days"></i>
-        </div>
-
-        <h3>9 Months</h3>
-
-        <p>
-            <strong>₱4,131.00</strong>
-        </p>
-
-        <form action="payments.php" method="GET">
-
-            <input type="hidden" name="plan" value="7">
-
-            <button type="submit">
-                Choose Package
-            </button>
-
-        </form>
-
-    </div>
-
-    <!-- 1 YEAR -->
-
-    <div class="card">
-
-        <div class="card-icon">
-            <i class="fa-solid fa-crown"></i>
-        </div>
-
-        <h3>1 Year</h3>
-
-        <p>
-            <strong>₱5,509.00</strong>
-        </p>
-
-        <form action="payments.php" method="GET">
-
-            <input type="hidden" name="plan" value="8">
-
-            <button type="submit">
-                Choose Package
-            </button>
-
-        </form>
-
-    </div>
 
 </div>
 <?php } ?>
