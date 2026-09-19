@@ -41,6 +41,32 @@ $nameStmt->close();
 
 $plan_name = $plan['plan_name'] ?? "Unknown membership plan";
 
+
+$checkStmt = $con->prepare("
+    SELECT COUNT(*) AS total
+    FROM membership
+    WHERE plan_id = ?
+");
+
+$checkStmt->bind_param("i", $plan_id);
+$checkStmt->execute();
+
+$checkResult = $checkStmt->get_result();
+$checkData = $checkResult->fetch_assoc();
+
+$checkStmt->close();
+
+
+if ((int)$checkData['total'] > 0) {
+
+    header(
+        "Location: membership_plans_admin.php?error=plan_used"
+    );
+    exit;
+
+}
+
+
 $stmt = $con->prepare("
     DELETE FROM membership_plans
     WHERE plan_id = ?
@@ -61,6 +87,15 @@ $stmt->bind_param(
 
 
 if (!$stmt->execute()) {
+
+    if ($con->errno == 1451) {
+
+        header(
+            "Location: membership_plans_admin.php?error=plan_used"
+        );
+        exit;
+
+    }
 
     die("Delete Error: " . $stmt->error);
 
