@@ -19,18 +19,19 @@ $user = $result->fetch_assoc();
 $fullname = trim($user['first_name'] . " " . $user['last_name']);
 $stmt = $con->prepare("
     SELECT
-        membership_id,
-        plan_name,
-        start_date,
-        end_date,
-        status
-    FROM membership
-    WHERE member_id = ?
-    AND status='Active'
-    AND end_date>=CURDATE()
+        m.membership_id,
+        mp.plan_name,
+        m.start_date,
+        m.end_date,
+        m.status
+    FROM membership m
+    INNER JOIN membership_plans mp
+        ON m.plan_id = mp.plan_id
+    WHERE m.member_id = ?
+    AND m.status = 'Active'
+    AND m.end_date >= CURDATE()
     LIMIT 1
 ");
-
 $stmt->bind_param("i",$user['id']);
 $stmt->execute();
 
