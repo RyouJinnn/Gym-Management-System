@@ -12326,3 +12326,74 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 .password-toggle:hover{
     color:#39ff14;
 }
+
+.error-message{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    background:#3a1515;
+    color:#ff6b6b;
+    border:1px solid #ff4444;
+    padding:14px 18px;
+    border-radius:8px;
+    margin-bottom:20px;
+    font-size:14px;
+}
+
+.error-message i{
+    font-size:18px;
+    color:#ff4444;
+}
+
+.form-input-wrapper{
+    position:relative;
+}
+
+.password-toggle{
+    position:absolute !important;
+    right:15px !important;
+    top:50% !important;
+    left:auto !important;
+    transform:translateY(-50%) !important;
+
+    width:35px !important;
+    height:35px !important;
+
+    padding:0 !important;
+    margin:0 !important;
+
+    border:none !important;
+    background:transparent !important;
+
+    color:#888 !important;
+
+    cursor:pointer !important;
+
+    display:flex !important;
+    align-items:center !important;
+    justify-content:center !important;
+
+    z-index:100 !important;
+    pointer-events:auto !important;
+}
+
+.password-toggle i{
+    pointer-events:none;
+    font-size:15px;
+}
+
+.password-toggle:hover{
+    color:#39FF14 !important;
+}
+
+.password-error{
+    color:#ff4444;
+    font-size:12px;
+    margin-top:6px;
+    line-height:1.5;
+    display:none;
+}
+
+.password-error.show{
+    display:block;
+}
