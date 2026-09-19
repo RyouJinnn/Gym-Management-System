@@ -740,17 +740,17 @@ rel="stylesheet">
             required
         >
 
-        <i
-            class="fa-solid fa-eye password-toggle"
+        <button
+            type="button"
+            class="password-toggle"
             onclick="togglePassword('password', this)"
-        ></i>
+        >
+            <i class="fa-solid fa-eye"></i>
+        </button>
 
     </div>
 
 </div>
-
-
-<!-- CONFIRM PASSWORD -->
 
 <div class="form-group">
 
@@ -771,10 +771,13 @@ rel="stylesheet">
             required
         >
 
-        <i
-            class="fa-solid fa-eye password-toggle"
+        <button
+            type="button"
+            class="password-toggle"
             onclick="togglePassword('confirm_password', this)"
-        ></i>
+        >
+            <i class="fa-solid fa-eye"></i>
+        </button>
 
     </div>
 
@@ -926,9 +929,14 @@ rel="stylesheet">
 
 <script>
 
-function togglePassword(inputId, icon){
+function togglePassword(inputId, button){
 
     const input = document.getElementById(inputId);
+    const icon = button.querySelector("i");
+
+    if(!input || !icon){
+        return;
+    }
 
     if(input.type === "password"){
 
