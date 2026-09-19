@@ -58,23 +58,31 @@ if($search !== ""){
 
     $sql .= "
         AND (
-            first_name LIKE ?
-            OR middlename LIKE ?
-            OR last_name LIKE ?
-            OR email LIKE ?
-            OR contact_number LIKE ?
-        )
+    CONCAT_WS(
+        ' ',
+        first_name,
+        NULLIF(middlename, ''),
+        last_name,
+        NULLIF(suffix, '')
+    ) LIKE ?
+    OR first_name LIKE ?
+    OR middlename LIKE ?
+    OR last_name LIKE ?
+    OR email LIKE ?
+    OR contact_number LIKE ?
+)
     ";
 
     $searchValue = "%" . $search . "%";
 
     $params[] = $searchValue;
-    $params[] = $searchValue;
-    $params[] = $searchValue;
-    $params[] = $searchValue;
-    $params[] = $searchValue;
+$params[] = $searchValue;
+$params[] = $searchValue;
+$params[] = $searchValue;
+$params[] = $searchValue;
+$params[] = $searchValue;
 
-    $types .= "sssss";
+$types .= "ssssss";
 }
 
 
@@ -125,22 +133,29 @@ $countTypes = "";
 if($search !== ""){
 
     $countSql .= "
-        AND (
-            first_name LIKE ?
-            OR middlename LIKE ?
-            OR last_name LIKE ?
-            OR email LIKE ?
-            OR contact_number LIKE ?
-        )
+       AND (
+    CONCAT_WS(
+        ' ',
+        first_name,
+        NULLIF(middlename, ''),
+        last_name,
+        NULLIF(suffix, '')
+    ) LIKE ?
+    OR first_name LIKE ?
+    OR middlename LIKE ?
+    OR last_name LIKE ?
+    OR email LIKE ?
+    OR contact_number LIKE ?
+)
     ";
 
     $countParams = array_fill(
-        0,
-        5,
-        "%" . $search . "%"
-    );
+    0,
+    6,
+    "%" . $search . "%"
+);
 
-    $countTypes = "sssss";
+$countTypes = "ssssss";
 }
 
 if($status !== ""){
