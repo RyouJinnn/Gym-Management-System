@@ -75,7 +75,6 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
         }
 
-
         $stmt->bind_param(
             "sidss",
             $plan_name,
@@ -84,7 +83,6 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             $description,
             $status
         );
-
 
         if ($stmt->execute()) {
 
@@ -102,7 +100,6 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
     $stmt->close();
 
-
             header(
                 "Location: membership_plan_view_admin.php?id="
                 . $new_plan_id
@@ -117,15 +114,11 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
         }
 
-
         $stmt->close();
 
     }
-
 }
-
 ?>
-
 
 <!DOCTYPE html>
 
@@ -159,24 +152,15 @@ rel="stylesheet">
 
 </head>
 
-
 <body>
-
 
 <div class="wrapper">
 
-
 <?php include("includes/admin_sidebar.php"); ?>
-
 
 <div class="main">
 
 <div class="dashboard-content membership-plan-form-content">
-
-
-    <!-- =========================
-         PAGE HEADER
-    ========================= -->
 
     <div class="page-header">
 
@@ -191,7 +175,6 @@ rel="stylesheet">
             </p>
 
         </div>
-
 
         <a
     href="membership_plans_admin.php"
@@ -602,13 +585,7 @@ function confirmAddPlan() {
     membershipPlanForm.submit();
 
 }
-
-
-/*
-    Close popup when clicking
-    outside the popup box
-*/
-
+    
 addPlanModal.addEventListener(
     "click",
     function(event) {
@@ -616,9 +593,7 @@ addPlanModal.addEventListener(
         if (event.target === addPlanModal) {
 
             closeAddPlanModal();
-
         }
-
     }
 );
 
