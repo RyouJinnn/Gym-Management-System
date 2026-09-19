@@ -439,12 +439,6 @@ if ($memberId <= 0 && $payerName === '') {
             }
         }
     }
-}
-
-
-/* ======================================================
-   SEARCH MEMBERS
-====================================================== */
 
 $search = trim($_GET['search'] ?? '');
 
@@ -1171,15 +1165,10 @@ while ($row = $walkInResult->fetch_assoc()) {
                         </div>
 
                     <?php endif; ?>
-
                 </div>
-
             </div>
-
         </div>
-
     </div>
-
 </div>
 
 </body>
