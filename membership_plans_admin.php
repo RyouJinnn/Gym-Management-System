@@ -6,8 +6,8 @@ require_once("includes/admin_auth.php");
 // ==============================
 
 $added = isset($_GET['added']) && $_GET['added'] === '1';
-
 $deleted = isset($_GET['deleted']) && $_GET['deleted'] === '1';
+$plan_used = isset($_GET['error']) && $_GET['error'] === 'plan_used';
 
 
 // ==============================
@@ -224,6 +224,20 @@ rel="stylesheet">
         </div>
 
     <?php endif; ?>
+
+    <?php if ($plan_used): ?>
+
+    <div class="error-message">
+
+        <i class="fa-solid fa-circle-xmark"></i>
+
+        <span>
+            This membership plan cannot be deleted because it is already being used by existing memberships.
+        </span>
+
+    </div>
+
+<?php endif; ?>
 
 
     <!-- PAGE HEADER -->
@@ -712,11 +726,6 @@ rel="stylesheet">
 
 </div>
 
-
-<!-- ==========================================
-     DELETE POPUP JAVASCRIPT
-========================================== -->
-
 <script>
 
 function openDeletePlanModal(planId, planName) {
@@ -731,18 +740,13 @@ function openDeletePlanModal(planId, planName) {
 
 }
 
-
 function closeDeletePlanModal() {
 
     document
         .getElementById("deletePlanModal")
         .classList.remove("show");
-
 }
-
-
-// Close popup when clicking outside
-
+    
 document
     .getElementById("deletePlanModal")
     .addEventListener("click", function(event) {
@@ -750,21 +754,16 @@ document
         if (event.target === this) {
 
             closeDeletePlanModal();
-
         }
-
     });
 
 </script>
 
-
 </div>
-
 
 </body>
 
 </html>
-
 
 <?php
 
