@@ -742,21 +742,20 @@ rel="stylesheet">
             name="password"
             minlength="8"
             maxlength="25"
-            style="padding-right:45px;"
             required
         >
 
-        <i
-            class="fa-solid fa-eye password-toggle"
+        <button
+            type="button"
+            class="password-toggle"
             onclick="togglePassword('password', this)"
-        ></i>
+        >
+            <i class="fa-solid fa-eye"></i>
+        </button>
 
     </div>
 
 </div>
-
-
-<!-- CONFIRM PASSWORD -->
 
 <div class="form-group">
 
@@ -774,19 +773,20 @@ rel="stylesheet">
             name="confirm_password"
             minlength="8"
             maxlength="25"
-            style="padding-right:45px;"
             required
         >
 
-        <i
-            class="fa-solid fa-eye password-toggle"
+        <button
+            type="button"
+            class="password-toggle"
             onclick="togglePassword('confirm_password', this)"
-        ></i>
+        >
+            <i class="fa-solid fa-eye"></i>
+        </button>
 
     </div>
 
 </div>
-                    <!-- STATUS -->
 
                     <div class="form-group">
 
@@ -821,11 +821,7 @@ rel="stylesheet">
 
                     </div>
 
-
-                    <!-- BUTTONS -->
-
                     <div class="form-actions">
-
 
                         <a
                             href="members_staff.php"
@@ -835,7 +831,6 @@ rel="stylesheet">
                             Cancel
 
                         </a>
-
 
                         <button
                             type="submit"
@@ -848,27 +843,17 @@ rel="stylesheet">
 
                         </button>
 
-
                     </div>
-
 
                 </form>
 
             </div>
 
-
         </div>
-
 
     </div>
 
-
 </div>
-
-
-<!-- ==========================================
-     ADD MEMBER CONFIRMATION POPUP
-========================================== -->
 
 <div
     id="addMemberModal"
@@ -883,7 +868,6 @@ rel="stylesheet">
             <i class="fa-solid fa-user-plus"></i>
 
         </div>
-
 
         <h2>
             Add Member?
@@ -900,9 +884,7 @@ rel="stylesheet">
 
         </p>
 
-
         <div class="add-plan-modal-actions">
-
 
             <button
                 type="button"
@@ -914,7 +896,6 @@ rel="stylesheet">
 
             </button>
 
-
             <button
                 type="button"
                 class="add-plan-confirm"
@@ -925,20 +906,22 @@ rel="stylesheet">
 
             </button>
 
-
         </div>
-
 
     </div>
 
 </div>
 
-
 <script>
 
-    function togglePassword(inputId, icon){
+function togglePassword(inputId, button){
 
     const input = document.getElementById(inputId);
+    const icon = button.querySelector("i");
+
+    if(!input || !icon){
+        return;
+    }
 
     if(input.type === "password"){
 
