@@ -40,7 +40,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     logActivity(
         $con,
         "Feedback Submission",
-        $user['full_name'] . " submitted new feedback.",
+        $user['first_name'] . " " . $user['last_name'] . " submitted new feedback.",
         $user['id'],
         "Member"
     );
@@ -419,9 +419,7 @@ if(menuBtn && sidebar){
     });
 
 }
-
-/* Auto resize textarea */
-
+    
 const textarea = document.querySelector("textarea");
 
 if(textarea){
