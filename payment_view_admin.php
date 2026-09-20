@@ -544,18 +544,68 @@ $statusClass = strtolower(
 
                             <?php
 
-                            $proofFile =
-                                $payment[
-                                    'proof_of_payment'
-                                ];
+                            $proofFile = trim(
+    $payment['proof_of_payment']
+);
 
-                            $extension =
-                                strtolower(
-                                    pathinfo(
-                                        $proofFile,
-                                        PATHINFO_EXTENSION
-                                    )
-                                );
+$proofUrl = $proofFile;
+
+/*
+    Check the stored file path.
+    Some payments use proof_of_payment/
+    while older/member payments use payment_proofs/.
+*/
+
+$proofDiskPath = __DIR__ . "/" . ltrim(
+    $proofFile,
+    "/\\"
+);
+
+if (!file_exists($proofDiskPath)) {
+
+    if (strpos($proofFile, "proof_of_payment/") === 0) {
+
+        $alternativeFile =
+            "payment_proofs/" .
+            substr(
+                $proofFile,
+                strlen("proof_of_payment/")
+            );
+
+    } elseif (strpos($proofFile, "payment_proofs/") === 0) {
+
+        $alternativeFile =
+            "proof_of_payment/" .
+            substr(
+                $proofFile,
+                strlen("payment_proofs/")
+            );
+
+    } else {
+
+        $alternativeFile = "";
+
+    }
+
+    if (
+        $alternativeFile !== "" &&
+        file_exists(
+            __DIR__ . "/" . $alternativeFile
+        )
+    ) {
+
+        $proofUrl = $alternativeFile;
+
+    }
+}
+
+$extension =
+    strtolower(
+        pathinfo(
+            $proofUrl,
+            PATHINFO_EXTENSION
+        )
+    );
 
 
                             $imageExtensions = [
@@ -569,23 +619,41 @@ $statusClass = strtolower(
 
 
                             <?php if (
-                                in_array(
-                                    $extension,
-                                    $imageExtensions
-                                )
-                            ): ?>
+    in_array(
+        $extension,
+        $imageExtensions
+    )
+): ?>
 
+    <?php
 
-                                <img
-                                    src="<?php
-                                        echo htmlspecialchars(
-                                            $proofFile
-                                        );
-                                    ?>"
-                                    alt="Proof of Payment"
-                                    class="payment-proof-image"
-                                >
+    $proofFileName = basename($proofFile);
 
+    $proofDiskPath =
+        __DIR__ . "/proof_of_payment/" . $proofFileName;
+
+    $proofUrl =
+        "/gymProject/proof_of_payment/" . rawurlencode($proofFileName);
+
+    ?>
+
+    <?php if (file_exists($proofDiskPath)): ?>
+
+        <img
+            src="<?= htmlspecialchars($proofUrl) ?>"
+            alt="Proof of Payment"
+            class="payment-proof-image"
+            onclick="window.open(this.src, '_blank')"
+        >
+
+    <?php else: ?>
+
+        <p style="color:#ff4444;">
+            Proof file not found:
+            <?= htmlspecialchars($proofFileName) ?>
+        </p>
+
+    <?php endif; ?>
 
                             <?php elseif (
                                 $extension === 'pdf'
@@ -603,11 +671,7 @@ $statusClass = strtolower(
                                     </span>
 
                                     <a
-                                        href="<?php
-                                            echo htmlspecialchars(
-                                                $proofFile
-                                            );
-                                        ?>"
+                                        href="<?= htmlspecialchars($proofUrl) ?>"
                                         target="_blank"
                                         class="payment-proof-btn"
                                     >
@@ -637,11 +701,7 @@ $statusClass = strtolower(
                                     </span>
 
                                     <a
-                                        href="<?php
-                                            echo htmlspecialchars(
-                                                $proofFile
-                                            );
-                                        ?>"
+                                        href="<?= htmlspecialchars($proofUrl) ?>"
                                         target="_blank"
                                         class="payment-proof-btn"
                                     >
