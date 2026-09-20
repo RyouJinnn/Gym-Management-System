@@ -249,8 +249,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             } else {
 
                 $uploadDirectory =
-                    __DIR__ . "/payment_proofs/";
-
+    __DIR__ . "/proof_of_payment/";
 
                 if (
                     !is_dir($uploadDirectory)
@@ -287,8 +286,8 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                 ) {
 
                     $proof_of_payment =
-                        "payment_proofs/" .
-                        $newFileName;
+    "proof_of_payment/" .
+    $newFileName;
 
                 } else {
 
@@ -1147,39 +1146,48 @@ rel="stylesheet">
 
                     </div>
 
+                    <?php
 
-                    <?php if (
-                        !empty(
-                            $payment['proof_of_payment']
-                        )
-                    ): ?>
+$proofFileName = basename(
+    $payment['proof_of_payment'] ?? ''
+);
 
-                        <div class="current-proof">
+$proofUrl =
+    dirname($_SERVER['SCRIPT_NAME'])
+    . "/proof_of_payment/"
+    . rawurlencode($proofFileName);
 
-                            <i class="fa-solid fa-file-circle-check"></i>
+?>
 
-                            <span>
-                                Current proof of payment is uploaded.
-                            </span>
+<?php if (
+    !empty(
+        $payment['proof_of_payment']
+    )
+): ?>
 
-                            <a
-                                href="<?= htmlspecialchars(
-                                    $payment['proof_of_payment']
-                                ) ?>"
-                                target="_blank"
-                                class="payment-proof-btn"
-                            >
+    <div class="current-proof">
 
-                                <i class="fa-solid fa-eye"></i>
+        <i class="fa-solid fa-file-circle-check"></i>
 
-                                View Current Proof
+        <span>
+            Current proof of payment is uploaded.
+        </span>
 
-                            </a>
+        <a
+            href="<?= htmlspecialchars($proofUrl) ?>"
+            target="_blank"
+            class="payment-proof-btn"
+        >
 
-                        </div>
+            <i class="fa-solid fa-eye"></i>
 
-                    <?php endif; ?>
+            View Current Proof
 
+        </a>
+
+    </div>
+
+<?php endif; ?>
 
                     <div class="form-group">
 
@@ -1233,24 +1241,13 @@ rel="stylesheet">
                         Save Changes
 
                     </button>
-
                 </div>
-
-
             </form>
-
-
         </div>
-
     </div>
-
 </div>
 
-
 <script>
-
-/* Automatically update amount when plan changes */
-
 const planSelect =
     document.getElementById("plan_id");
 
@@ -1278,15 +1275,11 @@ if (planSelect && amountInput) {
                     parseFloat(price).toFixed(2);
 
             }
-
         }
     );
-
 }
 
 </script>
-
-
+    
 </body>
-
 </html>
