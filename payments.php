@@ -286,8 +286,7 @@ if ($paymentMethod === "GCash") {
         die("Only JPG, JPEG, and PNG images are allowed.");
     }
 
-    // Create upload folder if it does not exist
-    $uploadDirectory = __DIR__ . "/uploads/payment_proofs/";
+    $uploadDirectory = __DIR__ . "/proof_of_payment/";
 
     if (!is_dir($uploadDirectory)) {
         mkdir($uploadDirectory, 0755, true);
@@ -305,16 +304,8 @@ if ($paymentMethod === "GCash") {
         die("Failed to upload proof of payment.");
     }
 
-    // This value will be saved in the database
-    $proofOfPayment = "payment_proofs/" . $newFileName;
+    $proofOfPayment = "proof_of_payment/" . $newFileName;
 }
-
-
-    /*
-    ==========================================
-    SAVE PAYMENT
-    ==========================================
-    */
 
     $paymentStmt = $con->prepare("
         INSERT INTO payments
