@@ -167,7 +167,7 @@ $statusClass = strtolower(
             font-size: 30px;
             font-weight: 700;
 
-            color: #FFD400;
+            color: #39FF14;
         }
 
         .attendance-view-header p {
@@ -220,7 +220,7 @@ $statusClass = strtolower(
 
             box-shadow:
                 0 10px 25px
-                rgba(255,212,0,.20);
+                rgba(57,255,20,.20)
         }
 
 
@@ -284,7 +284,7 @@ $statusClass = strtolower(
             align-items: center;
             justify-content: center;
 
-            background: #FFD400;
+            background: #39FF14;
 
             border-radius: 50%;
 
@@ -362,11 +362,10 @@ $statusClass = strtolower(
 
         .attendance-status.default {
 
-            background: #3d3210;
+    background: #303030;
 
-            color: #FFD400;
-        }
-
+    color: #bdbdbd;
+}
 
         /* ======================================================
            INFORMATION GRID
@@ -426,7 +425,7 @@ $statusClass = strtolower(
 
             width: 20px;
 
-            color: #FFD400;
+            color: #39FF14;
 
             font-size: 15px;
         }
@@ -880,19 +879,11 @@ $statusClass = strtolower(
                         </strong>
 
                     </div>
-
                 </div>
-
-
             </div>
-
-
         </div>
-
     </div>
-
 </div>
 
 </body>
-
 </html>
