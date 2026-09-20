@@ -569,13 +569,23 @@ resend.addEventListener("click", function(e){
         return;
     }
 
+    fetch("resend_verify_code.php")
+.then(() => {
+
     const endTime = Date.now() + 60000;
 
     sessionStorage.setItem("verifyTimerEnd", endTime);
 
     startCountdown(endTime);
 
-    fetch("resend_verify_code.php");
+    inputs.forEach(box => {
+        box.value = "";
+        box.classList.remove("invalid", "valid");
+    });
+
+    updateHidden();
+
+});
 
 });
 
