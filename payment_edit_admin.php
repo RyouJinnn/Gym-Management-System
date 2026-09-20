@@ -255,7 +255,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             } else {
 
                 $uploadDirectory =
-                    __DIR__ . "/payment_proofs/";
+                    __DIR__ . "/proof_of_payment/";
 
 
                 if (
@@ -293,7 +293,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                 ) {
 
                     $proof_of_payment =
-                        "payment_proofs/" .
+                        "proof_of_payment/" .
                         $newFileName;
 
                 } else {
@@ -1158,6 +1158,18 @@ rel="stylesheet">
 
                     </div>
 
+                    <?php
+
+$proofFileName = basename(
+    $payment['proof_of_payment'] ?? ''
+);
+
+$proofUrl =
+    dirname($_SERVER['SCRIPT_NAME'])
+    . "/proof_of_payment/"
+    . rawurlencode($proofFileName);
+
+?>
 
                     <?php if (
                         !empty(
@@ -1175,8 +1187,8 @@ rel="stylesheet">
 
                             <a
                                 href="<?= htmlspecialchars(
-                                    $payment['proof_of_payment']
-                                ) ?>"
+    $proofUrl
+) ?>"
                                 target="_blank"
                                 class="payment-proof-btn"
                             >
@@ -1244,30 +1256,18 @@ rel="stylesheet">
                         Save Changes
 
                     </button>
-
                 </div>
-
-
             </form>
-
-
         </div>
-
     </div>
-
 </div>
 
-
 <script>
-
-/* Automatically update amount when plan changes */
-
 const planSelect =
     document.getElementById("plan_id");
 
 const amountInput =
     document.getElementById("amount");
-
 
 if (planSelect && amountInput) {
 
@@ -1289,15 +1289,10 @@ if (planSelect && amountInput) {
                     parseFloat(price).toFixed(2);
 
             }
-
         }
     );
-
 }
 
 </script>
-
-
 </body>
-
 </html>
