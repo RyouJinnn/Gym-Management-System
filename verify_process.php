@@ -23,14 +23,14 @@ if (!isset($_SESSION['signup_data']['code']) || !isset($_SESSION['signup_data'][
     exit();
 }
 
-if ($userCode != $_SESSION['signup_data']['code']) {
-    $_SESSION['verify_error'] = "Invalid verification code.";
+if (date("Y-m-d H:i:s") >= $_SESSION['signup_data']['expiry']) {
+    $_SESSION['verify_error'] = "Verification code has expired.";
     header("Location: verify.php");
     exit();
 }
 
-if (date("Y-m-d H:i:s") > $_SESSION['signup_data']['expiry']) {
-    $_SESSION['verify_error'] = "Verification code has expired.";
+if ($userCode != $_SESSION['signup_data']['code']) {
+    $_SESSION['verify_error'] = "Invalid verification code.";
     header("Location: verify.php");
     exit();
 }
