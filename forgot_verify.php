@@ -381,47 +381,79 @@ button:hover{
     });
 
     const resend = document.getElementById("resendLink");
-    const timer = document.getElementById("timer");
-    const timerContainer = document.getElementById("timerContainer");
+const timer = document.getElementById("timer");
+const timerContainer = document.getElementById("timerContainer");
 
-    let endTime = sessionStorage.getItem("forgotTimerEnd");
-    if(endTime){
-        startCountdown(parseInt(endTime));
+let endTime = sessionStorage.getItem("forgotTimerEnd");
+
+/* Start a new 60-second timer when entering the page */
+if(!endTime){
+    endTime = Date.now() + 60000;
+    sessionStorage.setItem("forgotTimerEnd", endTime);
+}
+
+startCountdown(parseInt(endTime));
+
+resend.addEventListener("click",function(e){
+    e.preventDefault();
+
+    if(Date.now() < parseInt(endTime)){
+        return;
     }
 
-    resend.addEventListener("click",function(e){
-        e.preventDefault();
-        endTime = Date.now() + 60000;
-        sessionStorage.setItem("forgotTimerEnd",endTime);
-        startCountdown(endTime);
-    });
+    endTime = Date.now() + 60000;
 
-    function startCountdown(end){
-        resend.style.pointerEvents="none";
-        resend.style.opacity=".5";
-        timerContainer.style.display="inline";
+    sessionStorage.setItem(
+        "forgotTimerEnd",
+        endTime
+    );
 
-        const countdown=setInterval(function(){
-            const remaining=end-Date.now();
+    startCountdown(endTime);
+});
 
-            if(remaining<=0){
-                clearInterval(countdown);
-                sessionStorage.removeItem("forgotTimerEnd");
-                resend.style.pointerEvents="auto";
-                resend.style.opacity="1";
-                timerContainer.style.display="none";
-                return;
-            }
+function startCountdown(end){
 
-            const seconds=Math.floor(remaining/1000);
-            const minutes=Math.floor(seconds/60);
-            const secs=seconds%60;
+    resend.style.pointerEvents = "none";
+    resend.style.opacity = ".5";
 
-            timer.innerHTML=
-                String(minutes).padStart(2,"0")+":"+
-                String(secs).padStart(2,"0");
-        },250);
-    }
+    timerContainer.style.display = "inline";
+
+    const countdown = setInterval(function(){
+
+        const remaining = end - Date.now();
+
+        if(remaining <= 0){
+
+            clearInterval(countdown);
+
+            sessionStorage.removeItem(
+                "forgotTimerEnd"
+            );
+
+            resend.style.pointerEvents = "auto";
+            resend.style.opacity = "1";
+
+            timerContainer.style.display = "none";
+
+            return;
+        }
+
+        const seconds =
+            Math.floor(remaining / 1000);
+
+        const minutes =
+            Math.floor(seconds / 60);
+
+        const secs =
+            seconds % 60;
+
+        timer.innerHTML =
+            String(minutes).padStart(2,"0") +
+            ":" +
+            String(secs).padStart(2,"0");
+
+    },250);
+}
 
     </script>
 
