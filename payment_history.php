@@ -182,8 +182,9 @@ font-weight:700;
 }
 
 .pending{
-background:#facc15;
+background:#6b7280;
 color:#111;
+font-weight: 700;
 }
 
 .declined{
@@ -509,7 +510,7 @@ if($status=="approved"){
 
 ?>
 
-<div class="payment-card">
+<div class="payment-card" data-status="<?php echo $status; ?>">
 
 <div class="card-top">
 
@@ -734,6 +735,34 @@ modal.style.display="none";
 }
 
 }
+
+const statusFilter = document.getElementById("statusFilter");
+const paymentCards = document.querySelectorAll(".payment-card");
+
+statusFilter.addEventListener("change", function(){
+
+    const selectedStatus = this.value;
+
+    paymentCards.forEach(card => {
+
+        const cardStatus = card.dataset.status;
+
+        if(
+            selectedStatus === "all" ||
+            cardStatus === selectedStatus
+        ){
+
+            card.style.display = "block";
+
+        }else{
+
+            card.style.display = "none";
+
+        }
+
+    });
+
+});
 
 </script>
 
