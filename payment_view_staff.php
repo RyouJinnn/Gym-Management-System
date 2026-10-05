@@ -606,7 +606,6 @@ $extension =
                                 $extension === 'pdf'
                             ): ?>
 
-
                                 <div class="payment-proof-pdf">
 
                                     <i
@@ -632,7 +631,6 @@ $extension =
                                     </a>
 
                                 </div>
-
 
                             <?php else: ?>
 
@@ -668,7 +666,6 @@ $extension =
 
                     <?php else: ?>
 
-
                         <div class="no-payment-proof">
 
                             <i
@@ -681,25 +678,13 @@ $extension =
 
                         </div>
 
-
                     <?php endif; ?>
 
-
                 </div>
-
-
             </div>
-
-
         </div>
-
-
     </div>
-
-
 </div>
 
-
 </body>
-
 </html>
