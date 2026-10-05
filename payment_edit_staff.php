@@ -1207,7 +1207,6 @@ $proofUrl =
                             accept=".jpg,.jpeg,.png,.webp,.pdf"
                         >
 
-
                         <small>
                             JPG, PNG, WEBP, or PDF. Maximum 5MB.
                         </small>
@@ -1215,7 +1214,6 @@ $proofUrl =
                     </div>
 
                 </div>
-
 
                 <!-- BUTTONS -->
 
@@ -1248,12 +1246,13 @@ $proofUrl =
 </div>
 
 <script>
+
+/* Automatically update amount when plan changes */
 const planSelect =
     document.getElementById("plan_id");
 
 const amountInput =
     document.getElementById("amount");
-
 
 if (planSelect && amountInput) {
 
@@ -1280,6 +1279,6 @@ if (planSelect && amountInput) {
 }
 
 </script>
-    
 </body>
+
 </html>
