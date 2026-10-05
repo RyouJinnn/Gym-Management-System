@@ -617,7 +617,6 @@ $extension =
 
                             ?>
 
-
                             <?php if (
     in_array(
         $extension,
@@ -719,12 +718,9 @@ $extension =
 
                             <?php endif; ?>
 
-
                         </div>
 
-
                     <?php else: ?>
-
 
                         <div class="no-payment-proof">
 
@@ -738,24 +734,13 @@ $extension =
 
                         </div>
 
-
                     <?php endif; ?>
 
-
                 </div>
-
-
             </div>
-
-
         </div>
-
-
     </div>
-
-
 </div>
-
 
 </body>
 
