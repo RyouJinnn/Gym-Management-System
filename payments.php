@@ -1485,12 +1485,11 @@ document.querySelector("form").addEventListener("submit", function(event){
 
         return false;
     }
-
+   
     proofError.style.display = "none";
 
 });
 
 </script>
-
 </body>
 </html>
