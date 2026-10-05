@@ -1245,7 +1245,6 @@ $proofUrl =
 
                     </a>
 
-
                     <button
                         type="submit"
                         class="btn-primary"
@@ -1256,6 +1255,7 @@ $proofUrl =
                         Save Changes
 
                     </button>
+
                 </div>
             </form>
         </div>
@@ -1263,11 +1263,15 @@ $proofUrl =
 </div>
 
 <script>
+
+/* Automatically update amount when plan changes */
+
 const planSelect =
     document.getElementById("plan_id");
 
 const amountInput =
     document.getElementById("amount");
+
 
 if (planSelect && amountInput) {
 
@@ -1295,4 +1299,5 @@ if (planSelect && amountInput) {
 
 </script>
 </body>
+
 </html>
